@@ -1,0 +1,123 @@
+<div class="drug-requests-container slide-in">
+    <div class="page-header">
+        <h1>Liste des demandes de drogue</h1>
+        <button class="btn-primary add-btn" routerLink="/dashboard/drug-requests-form">
+            <span class="add-icon">+</span> Ajouter une demande
+        </button>
+    </div>
+
+    <div class="filters">
+        <div class="search-container">
+            <input
+                    type="text"
+                    placeholder="Rechercher..."
+                    class="search-input"
+                    (input)="onSearch($event)"
+            >
+        </div>
+
+        <div class="status-filters">
+            <button
+                    class="filter-btn"
+                    [class.active]="activeFilter === 'all'"
+                    (click)="filterByStatus('all')"
+            >
+                Toutes
+            </button>
+            <button
+                    class="filter-btn"
+                    [class.active]="activeFilter === 'pending'"
+                    (click)="filterByStatus('pending')"
+            >
+                En attente
+            </button>
+            <button
+                    class="filter-btn"
+                    [class.active]="activeFilter === 'approved'"
+                    (click)="filterByStatus('approved')"
+            >
+                Approuvées
+            </button>
+            <button
+                    class="filter-btn"
+                    [class.active]="activeFilter === 'rejected'"
+                    (click)="filterByStatus('rejected')"
+            >
+                Rejetées
+            </button>
+        </div>
+    </div>
+
+    <div class="table-container" *ngIf="requests.length > 0; else noData">
+        <table class="requests-table">
+            <thead>
+            <tr>
+                <th (click)="sortTable('nationalId')">
+                    Identifiant national
+                    <span class="sort-icon" *ngIf="sortField === 'nationalId'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+                </th>
+                <th (click)="sortTable('sector')">
+                    Secteur
+                    <span class="sort-icon" *ngIf="sortField === 'sector'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+                </th>
+                <th (click)="sortTable('ministry')">
+                    Ministère
+                    <span class="sort-icon" *ngIf="sortField === 'ministry'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+                </th>
+                <th (click)="sortTable('structure')">
+                    Structure
+                    <span class="sort-icon" *ngIf="sortField === 'structure'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+                </th>
+                <th (click)="sortTable('patientCode')">
+                    Code du patient
+                    <span class="sort-icon" *ngIf="sortField === 'patientCode'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+                </th>
+                <th (click)="sortTable('status')">
+                    Statut de la demande
+                    <span class="sort-icon" *ngIf="sortField === 'status'">
+                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                </span>
+                </th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let request of filteredRequests">
+                <td>{{ request.nationalId }}</td>
+                <td>{{ request.sector }}</td>
+                <td>{{ request.ministry }}</td>
+                <td>{{ request.structure }}</td>
+                <td>{{ request.patientCode }}</td>
+                <td>
+                <span class="status-badge" [class]="request.status">
+                  {{ getStatusLabel(request.status) }}
+                </span>
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="action-btn view-btn" title="Voir">👁️</button>
+                        <button class="action-btn edit-btn" title="Modifier">✏️</button>
+                        <button class="action-btn delete-btn" title="Supprimer">🗑️</button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-template #noData>
+        <div class="no-data">
+            <p>Aucune demande trouvée</p>
+        </div>
+    </ng-template>
+</div>

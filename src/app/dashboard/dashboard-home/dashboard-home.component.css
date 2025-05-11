@@ -1,0 +1,117 @@
+.dashboard-home {
+    padding: var(--spacing-2);
+}
+
+.welcome-message {
+    background-color: white;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+    box-shadow: var(--shadow-sm);
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+}
+
+.stat-card {
+    background-color: white;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-3);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 36px;
+    font-weight: bold;
+    margin-top: var(--spacing-2);
+    color: var(--primary);
+}
+
+.stat-value.pending {
+    color: var(--warning);
+}
+
+.stat-value.approved {
+    color: var(--success);
+}
+
+.stat-value.rejected {
+    color: var(--error);
+}
+
+.quick-access {
+    margin-top: var(--spacing-3);
+}
+
+.quick-access h2 {
+    margin-bottom: var(--spacing-3);
+}
+
+.quick-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-3);
+}
+
+.quick-link-card {
+    background-color: white;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-3);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.quick-link-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.card-icon {
+    font-size: 24px;
+    margin-bottom: var(--spacing-2);
+}
+
+.quick-link-card h3 {
+    margin-bottom: var(--spacing-1);
+    color: var(--primary);
+}
+
+.quick-link-card p {
+    color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-2);
+    }
+
+    .stat-value {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-links {
+        grid-template-columns: 1fr;
+    }
+}

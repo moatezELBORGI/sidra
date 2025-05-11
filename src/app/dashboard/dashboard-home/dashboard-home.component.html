@@ -1,0 +1,47 @@
+<div class="dashboard-home slide-in">
+    <h1>Tableau de bord</h1>
+
+    <div class="welcome-message">
+        <p>Bienvenue sur SIDRA - Système d'Information sur les Drogues et Addictions</p>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <h3>Demandes totales</h3>
+            <div class="stat-value">{{ totalRequests }}</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>En attente</h3>
+            <div class="stat-value pending">{{ pendingRequests }}</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>Approuvées</h3>
+            <div class="stat-value approved">{{ approvedRequests }}</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>Rejetées</h3>
+            <div class="stat-value rejected">{{ rejectedRequests }}</div>
+        </div>
+    </div>
+
+    <div class="quick-access">
+        <h2>Accès rapide</h2>
+
+        <div class="quick-links">
+            <a class="quick-link-card" routerLink="/dashboard/drug-requests">
+                <div class="card-icon">📋</div>
+                <h3>Liste des demandes</h3>
+                <p>Accéder à la liste complète des demandes de drogue</p>
+            </a>
+
+            <a class="quick-link-card" routerLink="/dashboard/drug-requests-form">
+                <div class="card-icon">➕</div>
+                <h3>Nouvelle demande</h3>
+                <p>Créer une nouvelle demande de drogue</p>
+            </a>
+        </div>
+    </div>
+</div>

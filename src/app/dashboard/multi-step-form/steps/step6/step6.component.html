@@ -1,0 +1,61 @@
+<div class="step-form">
+  <h2>Décès induit par les SPA dans l'entourage</h2>
+  
+  <div class="form-section" [formGroup]="deathsForm">
+    <div class="form-check">
+      <input 
+        type="checkbox" 
+        id="deathsInSocialCircle" 
+        formControlName="deathsInSocialCircle" 
+        class="form-check-input">
+      <label for="deathsInSocialCircle" class="form-check-label">
+        Y a-t-il eu des décès liés à l'usage de substances psychoactives dans votre entourage?
+      </label>
+    </div>
+    
+    <div *ngIf="deathsForm.get('deathsInSocialCircle')?.value" class="death-details">
+      <div class="form-group">
+        <label for="numberOfDeaths">Nombre de personnes décédées</label>
+        <input 
+          type="number" 
+          id="numberOfDeaths" 
+          formControlName="numberOfDeaths" 
+          class="form-control"
+          min="0">
+      </div>
+      
+      <div class="form-group">
+        <label for="relationshipToDeceased">Relation avec la/les personne(s) décédée(s)</label>
+        <select 
+          id="relationshipToDeceased" 
+          formControlName="relationshipToDeceased" 
+          class="form-control">
+          <option value="">Sélectionner une option</option>
+          <option *ngFor="let option of relationshipOptions" [value]="option">{{ option }}</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="substanceInvolved">Substance(s) impliquée(s) dans le(s) décès</label>
+        <select 
+          id="substanceInvolved" 
+          formControlName="substanceInvolved" 
+          class="form-control">
+          <option value="">Sélectionner une option</option>
+          <option *ngFor="let option of substanceOptions" [value]="option">{{ option }}</option>
+        </select>
+      </div>
+      
+      <div class="form-check">
+        <input 
+          type="checkbox" 
+          id="overdoseInvolved" 
+          formControlName="overdoseInvolved" 
+          class="form-check-input">
+        <label for="overdoseInvolved" class="form-check-label">
+          Décès lié à une surdose/overdose
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

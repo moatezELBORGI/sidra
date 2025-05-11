@@ -1,0 +1,84 @@
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background);
+    padding: var(--spacing-2);
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-4);
+    margin-bottom: var(--spacing-3);
+}
+
+.ministry-logo, .flag-logo {
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+}
+
+h1 {
+    font-size: 36px;
+    color: var(--primary);
+    margin-bottom: var(--spacing-1);
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-3);
+}
+
+.login-card {
+    margin-bottom: var(--spacing-3);
+    text-align: left;
+}
+
+.login-btn {
+    width: 100%;
+    padding: var(--spacing-2);
+    font-size: 16px;
+}
+
+.login-btn:disabled {
+    background-color: var(--text-secondary);
+    cursor: not-allowed;
+}
+
+.reset-link {
+    display: inline-block;
+    margin-bottom: var(--spacing-2);
+    font-size: 14px;
+}
+
+.login-error {
+    margin-top: var(--spacing-2);
+    text-align: center;
+}
+
+.copyright {
+    margin-top: var(--spacing-3);
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+    .logo-container {
+        gap: var(--spacing-2);
+    }
+
+    .ministry-logo, .flag-logo {
+        height: 60px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+}

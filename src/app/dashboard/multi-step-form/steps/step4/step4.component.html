@@ -1,0 +1,106 @@
+<div class="step-form">
+  <h2>Comportements liés à la consommation des SPA et tests de dépistage VIH, VHC et VHB</h2>
+  
+  <div class="form-section" [formGroup]="behaviorsForm">
+    <h3>Comportements à risque</h3>
+    
+    <div class="risk-behavior-group">
+      <div class="form-check">
+        <input 
+          type="checkbox" 
+          id="injectionUse" 
+          formControlName="injectionUse" 
+          class="form-check-input">
+        <label for="injectionUse" class="form-check-label">Utilisation de drogues par injection</label>
+      </div>
+      
+      <div class="form-check">
+        <input 
+          type="checkbox" 
+          id="needleSharing" 
+          formControlName="needleSharing" 
+          class="form-check-input">
+        <label for="needleSharing" class="form-check-label">Partage de matériel d'injection</label>
+      </div>
+      
+      <div class="form-check">
+        <input 
+          type="checkbox" 
+          id="sexualRiskBehaviors" 
+          formControlName="sexualRiskBehaviors" 
+          class="form-check-input">
+        <label for="sexualRiskBehaviors" class="form-check-label">Comportements sexuels à risque</label>
+      </div>
+    </div>
+    
+    <h3>Tests de dépistage</h3>
+    
+    <div class="testing-section">
+      <div class="testing-group">
+        <div class="form-check">
+          <input 
+            type="checkbox" 
+            id="hivTested" 
+            formControlName="hivTested" 
+            class="form-check-input">
+          <label for="hivTested" class="form-check-label">Test VIH réalisé</label>
+        </div>
+        
+        <div *ngIf="behaviorsForm.get('hivTested')?.value" class="test-result">
+          <label for="hivResult">Résultat du test VIH</label>
+          <select 
+            id="hivResult" 
+            formControlName="hivResult" 
+            class="form-control">
+            <option value="">Sélectionner un résultat</option>
+            <option *ngFor="let result of testResults" [value]="result">{{ result }}</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="testing-group">
+        <div class="form-check">
+          <input 
+            type="checkbox" 
+            id="hcvTested" 
+            formControlName="hcvTested" 
+            class="form-check-input">
+          <label for="hcvTested" class="form-check-label">Test Hépatite C (VHC) réalisé</label>
+        </div>
+        
+        <div *ngIf="behaviorsForm.get('hcvTested')?.value" class="test-result">
+          <label for="hcvResult">Résultat du test VHC</label>
+          <select 
+            id="hcvResult" 
+            formControlName="hcvResult" 
+            class="form-control">
+            <option value="">Sélectionner un résultat</option>
+            <option *ngFor="let result of testResults" [value]="result">{{ result }}</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="testing-group">
+        <div class="form-check">
+          <input 
+            type="checkbox" 
+            id="hbvTested" 
+            formControlName="hbvTested" 
+            class="form-check-input">
+          <label for="hbvTested" class="form-check-label">Test Hépatite B (VHB) réalisé</label>
+        </div>
+        
+        <div *ngIf="behaviorsForm.get('hbvTested')?.value" class="test-result">
+          <label for="hbvResult">Résultat du test VHB</label>
+          <select 
+            id="hbvResult" 
+            formControlName="hbvResult" 
+            class="form-control">
+            <option value="">Sélectionner un résultat</option>
+            <option *ngFor="let result of testResults" [value]="result">{{ result }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

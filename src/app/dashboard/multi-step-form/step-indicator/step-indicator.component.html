@@ -1,0 +1,16 @@
+<div class="step-indicator">
+    <div class="progress-bar">
+        <div class="progress" [style.width.%]="progressPercentage"></div>
+    </div>
+    <div class="steps">
+        <div
+                *ngFor="let step of steps; let i = index"
+                class="step"
+                [class.active]="currentStep === i + 1"
+                [class.completed]="currentStep > i + 1 || step.valid"
+                (click)="onStepClick(i + 1)">
+            <div class="step-number">{{ i + 1 }}</div>
+            <div class="step-label">{{ step.label }}</div>
+        </div>
+    </div>
+</div>

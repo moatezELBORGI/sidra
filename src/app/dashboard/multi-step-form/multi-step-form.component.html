@@ -1,0 +1,60 @@
+<div class="form-container">
+    <app-step-indicator
+            [steps]="steps"
+            [currentStep]="currentStep"
+            [progressPercentage]="progressPercentage"
+            (stepSelected)="goToStep($event)">
+    </app-step-indicator>
+
+    <div class="form-content">
+        <div class="step-content" *ngIf="currentStep === 1" @stepAnimation>
+            <app-step1 [parentForm]="form"></app-step1>
+        </div>
+
+        <div class="step-content" *ngIf="currentStep === 2" @stepAnimation>
+            <app-step2 [parentForm]="form"></app-step2>
+        </div>
+
+        <div class="step-content" *ngIf="currentStep === 3" @stepAnimation>
+            <app-step3 [parentForm]="form"></app-step3>
+        </div>
+
+        <div class="step-content" *ngIf="currentStep === 4" @stepAnimation>
+            <app-step4 [parentForm]="form"></app-step4>
+        </div>
+
+        <div class="step-content" *ngIf="currentStep === 5" @stepAnimation>
+            <app-step5 [parentForm]="form"></app-step5>
+        </div>
+
+        <div class="step-content" *ngIf="currentStep === 6" @stepAnimation>
+            <app-step6 [parentForm]="form"></app-step6>
+        </div>
+
+        <div class="form-controls">
+            <button
+                    type="button"
+                    class="btn btn-secondary"
+                    (click)="prevStep()"
+                    [disabled]="currentStep === 1">
+                Retour
+            </button>
+
+            <button
+                    *ngIf="currentStep < totalSteps"
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="nextStep()">
+                Suivant
+            </button>
+
+            <button
+                    *ngIf="currentStep === totalSteps"
+                    type="button"
+                    class="btn btn-success"
+                    (click)="submitForm()">
+                Soumettre
+            </button>
+        </div>
+    </div>
+</div>

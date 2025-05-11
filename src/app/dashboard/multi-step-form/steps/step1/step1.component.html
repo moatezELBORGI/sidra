@@ -1,0 +1,744 @@
+<div class="step-form">
+    <h2>Informations sur la structure/centre de prise en charge & l'usager de SPA</h2>
+    <div class="form-section" [formGroup]="structureForm">
+        <div class="form-group">
+            <label class="form-group__label">Secteur</label>
+            <div class="radio-group">
+                <div *ngFor="let option of sectorOptions" class="radio-option">
+                    <label [for]="'sector-' + option.key">{{ option.label }}</label>
+
+                    <input
+                            type="radio"
+                            [id]="'sector-' + option.key"
+                            formControlName="sector"
+                            [value]="option.key">
+                </div>
+            </div>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('sector')?.invalid && structureForm.get('sector')?.touched">
+                Veuillez sélectionner un secteur
+            </div>
+        </div>
+        <div *ngIf="showOngList()" class="nested-form">
+            <div class="form-group">
+                <label class="form-group__label" for="ongStructureId">Liste des ONG</label>
+                <select
+                        id="ongStructureId"
+                        formControlName="ongStructureId"
+                        class="form-control"
+                        [ngClass]="{'is-invalid': structureForm.get('ongStructureId')?.invalid && structureForm.get('ongStructureId')?.touched}">
+                    <option value="">Sélectionner une option</option>
+                    <option *ngFor="let option of ongStructureOptions" [value]="option.key">{{ option.label }}</option>
+                </select>
+                <div class="invalid-feedback"
+                     *ngIf="structureForm.get('ongStructureId')?.invalid && structureForm.get('ongStructureId')?.touched">
+                    Le choix de l'ONG est requis
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-group__label" for="structureId">Ministères</label>
+            <select
+                    id="structureId"
+                    formControlName="structureId"
+                    class="form-control"
+                    [ngClass]="{'is-invalid': structureForm.get('structureId')?.invalid && structureForm.get('structureId')?.touched}">
+                <option value="">Sélectionner une option</option>
+                <option *ngFor="let option of ministerOptions" [value]="option.key">{{ option.label }}</option>
+            </select>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('structureId')?.invalid && structureForm.get('structureId')?.touched">
+                Le choix du ministère est requis
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-group__label" for="structureDemandedStructureId">Structure / centre</label>
+            <select
+                    id="structureDemandedStructureId"
+                    formControlName="structureDemandedStructureId"
+                    class="form-control"
+                    [ngClass]="{'is-invalid': structureForm.get('structureDemandedStructureId')?.invalid && structureForm.get('structureDemandedStructureId')?.touched}">
+                <option value="">Sélectionner une option</option>
+                <option *ngFor="let option of structureDemandedOptions" [value]="option.key">{{ option.label }}</option>
+            </select>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('structureDemandedStructureId')?.invalid && structureForm.get('structureDemandedStructureId')?.touched">
+                Le choix de structure demandante est requis
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label class="form-group__label" for="fName">Nom</label>
+                    <input
+                            type="text"
+                            id="fName"
+                            formControlName="fName"
+                            class="form-control">
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group">
+                    <label class="form-group__label" for="lName">Prènom</label>
+                    <input
+                            type="text"
+                            id="lName"
+                            formControlName="lName"
+                            class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-group__label" for="patientId">Code du patient</label>
+            <input
+                    type="text"
+                    id="patientId"
+                    formControlName="patientId"
+                    class="form-control">
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('patientId')?.invalid && structureForm.get('patientId')?.touched">
+                Le code du patient est obligatoire
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-group__label" for="consultationDate">Date de la consultation/entretien </label>
+            <input
+                    type="date"
+                    id="consultationDate"
+                    formControlName="consultationDate"
+                    class="form-control"
+                    [ngClass]="{'is-invalid': structureForm.get('consultationDate')?.invalid && structureForm.get('consultationDate')?.touched}">
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('consultationDate')?.invalid && structureForm.get('consultationDate')?.touched">
+                La date de consultation est requise
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-group__label">Genre</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <label [for]="'gender-1'">Homme</label>
+
+                    <input
+                            type="radio"
+                            [id]="'gender-1'"
+                            formControlName="gender"
+                            value="1">
+                </div>
+                <div class="radio-option">
+                    <label [for]="'gender-2'">Femme</label>
+
+                    <input
+                            type="radio"
+                            [id]="'gender-2'"
+                            formControlName="gender"
+                            value="2">
+                </div>
+
+            </div>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('gender')?.invalid && structureForm.get('gender')?.touched">
+                Veuillez sélectionner un genre
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-group__label" for="birthDate">Date de naissance complète </label>
+            <input
+                    type="date"
+                    id="birthDate"
+                    formControlName="birthDate"
+                    class="form-control"
+                    [ngClass]="{'is-invalid': structureForm.get('birthDate')?.invalid && structureForm.get('birthDate')?.touched}">
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('birthDate')?.invalid && structureForm.get('birthDate')?.touched">
+                La date de naissance complète est requise
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-group__label" for="nationalityUuidCountry">Nationalité </label>
+            <select
+                    id="nationalityUuidCountry"
+                    formControlName="nationalityUuidCountry"
+                    class="form-control"
+                    [ngClass]="{'is-invalid': structureForm.get('nationalityUuidCountry')?.invalid && structureForm.get('nationalityUuidCountry')?.touched}">
+                <option value="">Sélectionner une option</option>
+                <option *ngFor="let option of nationalityOptions" [value]="option.key">{{ option.label }}</option>
+            </select>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('nationalityUuidCountry')?.invalid && structureForm.get('nationalityUuidCountry')?.touched">
+                La nationalité est requise
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-group__label">Residence</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <label [for]="'residence-1'">En Tunisie </label>
+
+                    <input
+                            type="radio"
+                            [id]="'residence-1'"
+                            formControlName="residence"
+                            value="1">
+                </div>
+                <div class="radio-option">
+                    <label [for]="'residence-2'">A l'étranger </label>
+
+                    <input
+                            type="radio"
+                            [id]="'residence-2'"
+                            formControlName="residence"
+                            value="2">
+                </div>
+            </div>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('residence')?.invalid && structureForm.get('residence')?.touched">
+                Veuillez sélectionner
+            </div>
+            <div *ngIf="showGovList()" class="nested-form">
+                <div class="form-group">
+                    <label class="form-group__label" for="governorateOfResidenceUuidGovernorate">Gouvernorat </label>
+                    <select
+                            id="governorateOfResidenceUuidGovernorate"
+                            formControlName="governorateOfResidenceUuidGovernorate"
+                            class="form-control"
+                            [ngClass]="{'is-invalid': structureForm.get('governorateOfResidenceUuidGovernorate')?.invalid && structureForm.get('governorateOfResidenceUuidGovernorate')?.touched}">
+                        <option value="">Sélectionner une option</option>
+                        <option *ngFor="let option of gouvernoratOptions" [value]="option.key">{{ option.label }}
+                        </option>
+                    </select>
+                    <div class="invalid-feedback"
+                         *ngIf="structureForm.get('governorateOfResidenceUuidGovernorate')?.invalid && structureForm.get('governorateOfResidenceUuidGovernorate')?.touched">
+                        La gouvernorat est requise
+                    </div>
+                </div>
+                <div *ngIf="showDelegation()" class="nested-form">
+                    <div class="form-group">
+                        <label class="form-group__label" for="cityOfResidenceUuidCity">Délégation </label>
+                        <select
+                                id="cityOfResidenceUuidCity"
+                                formControlName="cityOfResidenceUuidCity"
+                                class="form-control"
+                                [ngClass]="{'is-invalid': structureForm.get('cityOfResidenceUuidCity')?.invalid && structureForm.get('cityOfResidenceUuidCity')?.touched}">
+                            <option value="">Sélectionner une option</option>
+                            <option *ngFor="let option of delegationOptions" [value]="option.key">{{ option.label }}
+                            </option>
+                        </select>
+                        <div class="invalid-feedback"
+                             *ngIf="structureForm.get('cityOfResidenceUuidCity')?.invalid && structureForm.get('cityOfResidenceUuidCity')?.touched">
+                            La délégation est requise
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div *ngIf="showResidenceCountryList()" class="nested-form">
+                <div class="form-group">
+                    <label class="form-group__label" for="countryOfResidenceUuidCountry">Pays </label>
+                    <select
+                            id="countryOfResidenceUuidCountry"
+                            formControlName="countryOfResidenceUuidCountry"
+                            class="form-control"
+                            [ngClass]="{'is-invalid': structureForm.get('countryOfResidenceUuidCountry')?.invalid && structureForm.get('countryOfResidenceUuidCountry')?.touched}">
+                        <option value="">Sélectionner une option</option>
+                        <option *ngFor="let option of nationalityOptions" [value]="option.key">{{ option.label }}
+                        </option>
+                    </select>
+                    <div class="invalid-feedback"
+                         *ngIf="structureForm.get('countryOfResidenceUuidCountry')?.invalid && structureForm.get('countryOfResidenceUuidCountry')?.touched">
+                        Le pays est requise
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group__label">Cadre de la consultation/entretien </label>
+            <div class="checkbox-group">
+                <div *ngFor="let option of consultancyFrame" class="checkbox-option">
+                    <label [for]="'consultancyFrame-' + option.uuidConsultancyFrame">{{ option.consultancyFrameLabel }}</label>
+
+                    <input
+                            type="checkbox"
+                            [id]="'consultancyFrame-' + option.uuidConsultancyFrame"
+                            [checked]="structureForm.get('consultancyFrame')?.value === option.uuidConsultancyFrame"
+                            (change)="handleConsultancyFrameChange($event, option.uuidConsultancyFrame)"
+                    >
+                </div>
+            </div>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('consultancyFrame')?.invalid && structureForm.get('consultancyFrame')?.touched">
+                Veuillez sélectionner un cadre de consultation
+            </div>
+            <div *ngIf="showOtherConsultancyFrameInput" class="nested-form">
+                <div class="form-group">
+                    <label class="form-group__label" for="otherConsultancyFrame">Préciser</label>
+                    <input
+                            type="text"
+                            id="otherConsultancyFrame"
+                            formControlName="otherConsultancyFrame"
+                            class="form-control">
+                    <div class="invalid-feedback"
+                         *ngIf="structureForm.get('otherConsultancyFrame')?.invalid && structureForm.get('otherConsultancyFrame')?.touched">
+                        Veuillez préciser le cadre de la consultation
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group__label" for="originOfDemandSetUuidOriginOfDemands">Origine de la demande </label>
+
+            <div formArrayName="originOfDemandSetUuidOriginOfDemands">
+                <div *ngFor="let option of originOfDemande; let i = index" [formGroupName]="i" class="checkbox-option">
+                    <label>{{ option.originOfDemandLabel }}</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <label>
+                                <input (change)="checkOtherOriginOfDemand(option.uuidOriginOfDemand, true)"
+                                       type="radio" formControlName="selected" [value]="true"> Oui
+                            </label>
+                        </div>
+                        <div class="radio-option">
+                            <label>
+                                <input (change)="checkOtherOriginOfDemand(option.uuidOriginOfDemand, false)"
+                                       type="radio" formControlName="selected" [value]="false"> Non
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('originOfDemandSetUuidOriginOfDemands')?.invalid && structureForm.get('originOfDemandSetUuidOriginOfDemands')?.touched">
+                L'origine de la demande est requis
+            </div>
+            <div *ngIf="showOtherOriginOfDemandInput" class="nested-form">
+                <div class="form-group">
+                    <label class="form-group__label" for="otherOriginOfDemand">Préciser</label>
+                    <input
+                            type="text"
+                            id="otherOriginOfDemand"
+                            formControlName="otherOriginOfDemand"
+                            class="form-control">
+                    <div class="invalid-feedback"
+                         *ngIf="structureForm.get('otherOriginOfDemand')?.invalid && structureForm.get('otherOriginOfDemand')?.touched">
+                        Veuillez préciser l'origine de la demande
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group__label">Consultation antérieure</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <label [for]="'oldConsultancy-1'">Oui</label>
+
+                    <input
+                            type="radio"
+                            [id]="'oldConsultancy-1'"
+                            formControlName="oldConsultancy"
+                            (change)="showOtherOldConsultancyDate(true)"
+                            value="true">
+                </div>
+                <div class="radio-option">
+                    <label [for]="'oldConsultancy-2'">Non</label>
+
+                    <input
+                            type="radio"
+                            [id]="'oldConsultancy-2'"
+                            formControlName="oldConsultancy"
+                            (change)="showOtherOldConsultancyDate(false)"
+                            value="false">
+                </div>
+            </div>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('oldConsultancy')?.invalid && structureForm.get('oldConsultancy')?.touched">
+                Veuillez sélectionner une option
+            </div>
+            <div *ngIf="showOtherOldConsultancyDateInput" class="nested-form">
+                <div class="form-group">
+                    <label class="form-group__label" for="oldConsultancyDate">Date de la consultation antérieure</label>
+                    <input
+                            type="month"
+                            id="oldConsultancyDate"
+                            formControlName="oldConsultancyDate"
+                            class="form-control"
+                            [ngClass]="{'is-invalid': structureForm.get('oldConsultancyDate')?.invalid && structureForm.get('oldConsultancyDate')?.touched}"
+                    />
+                    <div
+                            class="invalid-feedback"
+                            *ngIf="structureForm.get('oldConsultancyDate')?.invalid && structureForm.get('oldConsultancyDate')?.touched">
+                        La date de consultation antérieure est requise
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="showOtherOldConsultancyDateInput" class="nested-form">
+                <div class="form-group">
+                    <label class="form-group__label" for="oldConsultancyMotifUuidConsultancyMotif">Motif de la
+                        consultation antérieure </label>
+                    <select
+                            id="oldConsultancyMotifUuidConsultancyMotif"
+                            formControlName="oldConsultancyMotifUuidConsultancyMotif"
+                            class="form-control"
+                            (change)="ShowRecidivismMotiveOrSeverity($event)"
+                            [ngClass]="{'is-invalid': structureForm.get('oldConsultancyMotifUuidConsultancyMotif')?.invalid && structureForm.get('oldConsultancyMotifUuidConsultancyMotif')?.touched}">
+                        <option value="">Sélectionner une option</option>
+                        <option *ngFor="let option of consultancyMotif"
+                                [value]="option.uuidConsultancyMotif">{{ option.consultancyMotif }}
+                        </option>
+                    </select>
+                    <div
+                            class="invalid-feedback"
+                            *ngIf="structureForm.get('oldConsultancyMotifUuidConsultancyMotif')?.invalid && structureForm.get('oldConsultancyMotifUuidConsultancyMotif')?.touched">
+                        La motif de la consultation antérieure est requise
+                    </div>
+                </div>
+                <div *ngIf="showOtherConsultancyMotifInput" class="nested-form">
+                    <div class="form-group">
+                        <label for="otherOldConsultancyMotif">Préciser</label>
+                        <input
+                                type="text"
+                                id="otherOldConsultancyMotif"
+                                formControlName="otherOldConsultancyMotif"
+                                class="form-control"
+                                [ngClass]="{'is-invalid': structureForm.get('otherOldConsultancyMotif')?.invalid && structureForm.get('otherOldConsultancyMotif')?.touched}">
+                        <div class="invalid-feedback"
+                             *ngIf="structureForm.get('otherOldConsultancyMotif')?.invalid && structureForm.get('otherOldConsultancyMotif')?.touched">
+                            Préciser le cadre de la consultation
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="showRecidivismMotiveInput" class="nested-form">
+                    <div class="form-group">
+                        <label for="reasonForRecidivismUuidReasonForRecidivism">Est motif de récidive , cause de
+                            récidive</label>
+                        <select
+                                id="reasonForRecidivismUuidReasonForRecidivism"
+                                formControlName="reasonForRecidivismUuidReasonForRecidivism"
+                                class="form-control"
+                                (change)="ShowOtherReasonForRecidivismUuidReasonForRecidivism($event)"
+                                [ngClass]="{'is-invalid': structureForm.get('reasonForRecidivismUuidReasonForRecidivism')?.invalid && structureForm.get('reasonForRecidivismUuidReasonForRecidivism')?.touched}">
+                            <option value="">Sélectionner une option</option>
+                            <option *ngFor="let option of reasonForRecidivism"
+                                    [value]="option.uuidReasonForRecidivism">{{ option.reasonForRecidivismLabel }}
+                            </option>
+                        </select>
+                        <div class="invalid-feedback"
+                             *ngIf="structureForm.get('reasonForRecidivismUuidReasonForRecidivism')?.invalid && structureForm.get('reasonForRecidivismUuidReasonForRecidivism')?.touched">
+                            La cause de récidive est requise
+                        </div>
+                    </div>
+                    <div *ngIf="ShowOtherReasonForRecidivismUuidReasonForRecidivismInput" class="nested-form">
+                        <div class="form-group">
+                            <label for="otherReasonForRecidivism">Préciser</label>
+                            <input
+                                    type="text"
+                                    id="otherReasonForRecidivism"
+                                    formControlName="otherReasonForRecidivism"
+                                    class="form-control"
+                                    [ngClass]="{'is-invalid': structureForm.get('otherReasonForRecidivism')?.invalid && structureForm.get('otherReasonForRecidivism')?.touched}">
+                            <div class="invalid-feedback"
+                                 *ngIf="structureForm.get('otherReasonForRecidivism')?.invalid && structureForm.get('otherReasonForRecidivism')?.touched">
+                                Préciser la raison
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="showReasonForWithdrawalInput" class="nested-form">
+                    <div class="form-group">
+                        <label for="reasonForWithdrawalUuidReasonForWithdrawal">Est motif de sevrage, cause de l'échec
+                            de sevrage </label>
+                        <select
+                                id="reasonForWithdrawalUuidReasonForWithdrawal"
+                                formControlName="reasonForWithdrawalUuidReasonForWithdrawal"
+                                class="form-control"
+                                (change)="ShowReasonForWithdrawalInput($event)"
+                                [ngClass]="{'is-invalid': structureForm.get('reasonForWithdrawalUuidReasonForWithdrawal')?.invalid && structureForm.get('reasonForWithdrawalUuidReasonForWithdrawal')?.touched}">
+                            <option value="">Sélectionner une option</option>
+                            <option *ngFor="let option of reasonForWithdrawal"
+                                    [value]="option.uuidReasonForWithdrawal">{{ option.reasonForWithdrawalLabel }}
+                            </option>
+                        </select>
+                        <div class="invalid-feedback"
+                             *ngIf="structureForm.get('reasonForWithdrawalUuidReasonForWithdrawal')?.invalid && structureForm.get('reasonForWithdrawalUuidReasonForWithdrawal')?.touched">
+                            La cause de l'échec de sevrage est requise
+                        </div>
+                    </div>
+                    <div *ngIf="ShowOtherReasonForWithdrawalInputInput" class="nested-form">
+                        <div class="form-group">
+                            <label for="otherReasonForWithdrawal">Préciser</label>
+                            <input
+                                    type="text"
+                                    id="otherReasonForWithdrawal"
+                                    formControlName="otherReasonForWithdrawal"
+                                    class="form-control"
+                                    [ngClass]="{'is-invalid': structureForm.get('otherReasonForWithdrawal')?.invalid && structureForm.get('otherReasonForWithdrawal')?.touched}">
+                            <div class="invalid-feedback"
+                                 *ngIf="structureForm.get('otherReasonForWithdrawal')?.invalid && structureForm.get('otherReasonForWithdrawal')?.touched">
+                                Préciser la raison
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group__label">Situation familiale </label>
+            <div class="checkbox-group">
+                <div *ngFor="let option of familySituation" class="checkbox-option">
+                    <label [for]="'familySituation-' + option.idFamilySituation">{{ option.familySituationLabel }}</label>
+
+                    <input
+                            type="checkbox"
+                            [id]="'familySituation-' + option.idFamilySituation"
+                            [checked]="structureForm.get('familySituationIdFamilySituation')?.value === option.idFamilySituation"
+                            (change)="handleFamilySituationChange($event, option.idFamilySituation)"
+                    >
+                </div>
+            </div>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('familySituationIdFamilySituation')?.invalid && structureForm.get('familySituationIdFamilySituation')?.touched">
+                Veuillez sélectionner une situation familiale
+            </div>
+            <div *ngIf="showOtherFamilySituationInput" class="nested-form">
+                <div class="form-group">
+                    <label class="form-group__label" for="otherFamilySituation">Préciser</label>
+                    <input
+                            type="text"
+                            id="otherFamilySituation"
+                            formControlName="otherFamilySituation"
+                            class="form-control">
+                    <div class="invalid-feedback"
+                         *ngIf="structureForm.get('otherFamilySituation')?.invalid && structureForm.get('otherFamilySituation')?.touched">
+                        Veuillez préciser la situation familiale
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group__label">Durant les 30 derniers jours précédant la consultation, le patient vivait
+                principalement </label>
+            <div class="checkbox-group">
+                <div *ngFor="let option of accommodationTypeDto" class="checkbox-option">
+                    <label [for]="'accommodationType-' + option.idAccommodationType">{{ option.accommodationTypeLabel }}</label>
+
+                    <input
+                            type="checkbox"
+                            [id]="'accommodationType-' + option.idAccommodationType"
+                            [checked]="structureForm.get('accommodationTypeIdAccommodationType')?.value === option.idAccommodationType"
+                            (change)="handleAccommodationTypeChange($event, option.idAccommodationType)"
+                    >
+                </div>
+            </div>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('accommodationTypeIdAccommodationType')?.invalid && structureForm.get('accommodationTypeIdAccommodationType')?.touched">
+                Veuillez sélectionner une option
+            </div>
+            <div *ngIf="showOtherAccommodationTypeInput" class="nested-form">
+                <div class="form-group">
+                    <label class="form-group__label" for="otherAccommodationType">Préciser</label>
+                    <input
+                            type="text"
+                            id="otherAccommodationType"
+                            formControlName="otherAccommodationType"
+                            class="form-control">
+                    <div class="invalid-feedback"
+                         *ngIf="structureForm.get('otherAccommodationType')?.invalid && structureForm.get('otherAccommodationType')?.touched">
+                        Veuillez préciser
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group__label">Nature de logement </label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <label [for]="'stableAccommodation-1'">Logement stable </label>
+
+                    <input
+                            type="radio"
+                            [id]="'stableAccommodation-1'"
+                            formControlName="stableAccommodation"
+                            value="true">
+                </div>
+                <div class="radio-option">
+                    <label [for]="'stableAccommodation-2'">Logement précaire/sans abri </label>
+
+                    <input
+                            type="radio"
+                            [id]="'stableAccommodation-2'"
+                            formControlName="stableAccommodation"
+                            value="false">
+                </div>
+            </div>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('stableAccommodation')?.invalid && structureForm.get('stableAccommodation')?.touched">
+                Veuillez sélectionner un nature de logement
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group__label">Profession </label>
+            <div class="checkbox-group">
+                <div *ngFor="let option of professionDto" class="checkbox-option">
+                    <label [for]="'profession-' + option.uuidProfession">{{ option.professionLabel }}</label>
+
+                    <input
+                            type="checkbox"
+                            [id]="'profession-' + option.uuidProfession"
+                            [checked]="structureForm.get('professionUuidProfession')?.value === option.uuidProfession"
+                            (change)="handleProfessionChange($event, option.uuidProfession)"
+                    >
+                </div>
+            </div>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('professionUuidProfession')?.invalid && structureForm.get('professionUuidProfession')?.touched">
+                Veuillez sélectionner une option
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group__label">Niveau scolaire </label>
+            <div class="checkbox-group">
+                <div *ngFor="let option of schoolLevel" class="checkbox-option">
+                    <label [for]="'schoolLevel-' + option.uuidSchoolLevelSchoolLevel">{{ option.schoolLevelLabel }}</label>
+
+                    <input
+                            type="checkbox"
+                            [id]="'schoolLevel-' + option.uuidSchoolLevelSchoolLevel"
+                            [checked]="structureForm.get('schoolLevelUuidSchoolLevelSchoolLevel')?.value === option.uuidSchoolLevelSchoolLevel"
+                            (change)="handleSchoolLevelChange($event, option.uuidSchoolLevelSchoolLevel)"
+                    >
+                </div>
+            </div>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('schoolLevelUuidSchoolLevelSchoolLevel')?.invalid && structureForm.get('schoolLevelUuidSchoolLevelSchoolLevel')?.touched">
+                Veuillez sélectionner une option
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group__label">Est-ce que vous pratiquez une activité sportive ? </label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <label [for]="'practiceSport-1'">Oui</label>
+
+                    <input
+                            type="radio"
+                            [id]="'practiceSport-1'"
+                            formControlName="practiceSport"
+                            (change)="showPracticeSport(true)"
+                            value="true">
+                </div>
+                <div class="radio-option">
+                    <label [for]="'practiceSport-2'">Non</label>
+
+                    <input
+                            type="radio"
+                            [id]="'practiceSport-2'"
+                            formControlName="practiceSport"
+                            (change)="showPracticeSport(false)"
+                            value="false">
+                </div>
+            </div>
+            <div class="invalid-feedback"
+                 *ngIf="structureForm.get('practiceSport')?.invalid && structureForm.get('practiceSport')?.touched">
+                Veuillez sélectionner une option
+            </div>
+            <div *ngIf="showPracticeSportInput" class="nested-form">
+                <div class="form-group">
+                    <label class="form-group__label">SI oui, vous pratiquez une activité sportive de façon </label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <label [for]="'regularPracticeSportWay-1'">régulière </label>
+
+                            <input
+                                    type="radio"
+                                    [id]="'regularPracticeSportWay-1'"
+                                    formControlName="regularPracticeSportWay"
+                                    value="true">
+                        </div>
+                        <div class="radio-option">
+                            <label [for]="'regularPracticeSportWay-2'">Irrégulière </label>
+
+                            <input
+                                    type="radio"
+                                    [id]="'regularPracticeSportWay-2'"
+                                    formControlName="regularPracticeSportWay"
+                                    value="false">
+                        </div>
+                    </div>
+                    <div class="invalid-feedback"
+                         *ngIf="structureForm.get('regularPracticeSportWay')?.invalid && structureForm.get('regularPracticeSportWay')?.touched">
+                        Veuillez sélectionner une option
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-group__label">SI oui, vous pratiquez une activité sportive </label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <label [for]="'competitionSportWay-1'">De compétition </label>
+
+                            <input
+                                    type="radio"
+                                    [id]="'competitionSportWay-1'"
+                                    formControlName="competitionSportWay"
+                                    (change)="competitionSportWay(true)"
+                                    value="true">
+                        </div>
+                        <div class="radio-option">
+                            <label [for]="'competitionSportWay-2'">De loisir </label>
+
+                            <input
+                                    type="radio"
+                                    [id]="'competitionSportWay-2'"
+                                    formControlName="competitionSportWay"
+                                    (change)="competitionSportWay(false)"
+                                    value="false">
+                        </div>
+                    </div>
+                    <div class="invalid-feedback"
+                         *ngIf="structureForm.get('competitionSportWay')?.invalid && structureForm.get('competitionSportWay')?.touched">
+                        Veuillez sélectionner une option
+                    </div>
+                    <div *ngIf="showCompetitionSportWayInput" class="nested-form">
+                        <div class="form-group">
+                            <label class="form-group__label">(Si de compétition), dopage </label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <label [for]="'doping-1'">Oui </label>
+
+                                    <input
+                                            type="radio"
+                                            [id]="'doping-1'"
+                                            formControlName="doping"
+                                            value="true">
+                                </div>
+                                <div class="radio-option">
+                                    <label [for]="'doping-2'">Non </label>
+
+                                    <input
+                                            type="radio"
+                                            [id]="'doping-2'"
+                                            formControlName="doping"
+                                            value="false">
+                                </div>
+                            </div>
+                            <div class="invalid-feedback"
+                                 *ngIf="structureForm.get('doping')?.invalid && structureForm.get('doping')?.touched">
+                                Veuillez sélectionner une option
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

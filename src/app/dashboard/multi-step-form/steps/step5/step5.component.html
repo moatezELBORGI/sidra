@@ -1,0 +1,91 @@
+<div class="step-form">
+  <h2>Comorbidités</h2>
+  
+  <div class="form-section" [formGroup]="comorbiditiesForm">
+    <div class="comorbidity-group">
+      <div class="form-check">
+        <input 
+          type="checkbox" 
+          id="psychiatricDisorders" 
+          formControlName="psychiatricDisorders" 
+          class="form-check-input">
+        <label for="psychiatricDisorders" class="form-check-label">Troubles psychiatriques</label>
+      </div>
+      
+      <div *ngIf="comorbiditiesForm.get('psychiatricDisorders')?.value" class="comorbidity-details">
+        <label for="psychiatricDisordersDetails">Précisez les troubles</label>
+        <textarea 
+          id="psychiatricDisordersDetails" 
+          formControlName="psychiatricDisordersDetails" 
+          class="form-control"
+          rows="3"
+          placeholder="Spécifiez le(s) trouble(s) psychiatrique(s)"></textarea>
+      </div>
+    </div>
+    
+    <div class="comorbidity-group">
+      <div class="form-check">
+        <input 
+          type="checkbox" 
+          id="cardiovascularDisease" 
+          formControlName="cardiovascularDisease" 
+          class="form-check-input">
+        <label for="cardiovascularDisease" class="form-check-label">Maladies cardiovasculaires</label>
+      </div>
+    </div>
+    
+    <div class="comorbidity-group">
+      <div class="form-check">
+        <input 
+          type="checkbox" 
+          id="respiratoryDisease" 
+          formControlName="respiratoryDisease" 
+          class="form-check-input">
+        <label for="respiratoryDisease" class="form-check-label">Maladies respiratoires</label>
+      </div>
+    </div>
+    
+    <div class="comorbidity-group">
+      <div class="form-check">
+        <input 
+          type="checkbox" 
+          id="liverDisease" 
+          formControlName="liverDisease" 
+          class="form-check-input">
+        <label for="liverDisease" class="form-check-label">Maladies hépatiques</label>
+      </div>
+    </div>
+    
+    <div class="comorbidity-group">
+      <div class="form-check">
+        <input 
+          type="checkbox" 
+          id="neurologicalDisorders" 
+          formControlName="neurologicalDisorders" 
+          class="form-check-input">
+        <label for="neurologicalDisorders" class="form-check-label">Troubles neurologiques</label>
+      </div>
+    </div>
+    
+    <div class="comorbidity-group">
+      <div class="form-check">
+        <input 
+          type="checkbox" 
+          id="otherHealthIssues" 
+          formControlName="otherHealthIssues" 
+          class="form-check-input">
+        <label for="otherHealthIssues" class="form-check-label">Autres problèmes de santé</label>
+      </div>
+      
+      <div *ngIf="comorbiditiesForm.get('otherHealthIssues')?.value" class="comorbidity-details">
+        <label for="otherHealthIssuesDetails">Précisez les problèmes de santé</label>
+        <textarea 
+          id="otherHealthIssuesDetails" 
+          formControlName="otherHealthIssuesDetails" 
+          class="form-control"
+          rows="3"
+          placeholder="Spécifiez le(s) problème(s) de santé"></textarea>
+      </div>
+    </div>
+  </div>
+</div>

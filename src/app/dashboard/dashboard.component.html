@@ -1,0 +1,75 @@
+<div class="dashboard-container" [class.sidebar-collapsed]="sidebarCollapsed">
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle-btn" (click)="toggleSidebar()">
+        <span class="toggle-icon">≡</span>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" [class.collapsed]="sidebarCollapsed" [class.mobile-visible]="!sidebarCollapsed">
+        <div class="sidebar-header">
+            <h2 *ngIf="!sidebarCollapsed">SIDRA</h2>
+            <span *ngIf="sidebarCollapsed" class="sidebar-logo">S</span>
+            <button class="toggle-btn" (click)="toggleSidebar()">
+                <span class="toggle-icon">≡</span>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-text" *ngIf="!sidebarCollapsed">Tableau de bord</span>
+                    </a>
+                </li>
+
+                <li class="nav-group" [class.expanded]="drugMenuExpanded">
+                    <div class="nav-group-header" (click)="toggleDrugMenu()">
+                        <span class="nav-icon">💊</span>
+                        <span class="nav-text" *ngIf="!sidebarCollapsed">PEC des demandes</span>
+                        <span class="expand-icon" *ngIf="!sidebarCollapsed">{{ drugMenuExpanded ? '▼' : '▶' }}</span>
+                    </div>
+
+                    <ul class="sub-menu" [class.visible]="drugMenuExpanded || sidebarCollapsed">
+                        <li>
+                            <a routerLink="/dashboard/drug-requests" routerLinkActive="active" class="nav-item">
+                                <span class="nav-icon sub-icon">📋</span>
+                                <span class="nav-text" *ngIf="!sidebarCollapsed">Liste des demandes de drogue</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a routerLink="/dashboard/profile" routerLinkActive="active" class="nav-item">
+                        <span class="nav-icon">👤</span>
+                        <span class="nav-text" *ngIf="!sidebarCollapsed">Mon profil</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a (click)="logout()" class="nav-item logout-item">
+                        <span class="nav-icon">🚪</span>
+                        <span class="nav-text" *ngIf="!sidebarCollapsed">Déconnexion</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <div class="header">
+            <div class="user-info">
+                <span class="user-email">{{ userEmail }}</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+
+    <!-- Mobile overlay -->
+    <div class="mobile-overlay" [class.visible]="!sidebarCollapsed" (click)="toggleSidebar()"></div>
+</div>

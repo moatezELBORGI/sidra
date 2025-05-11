@@ -1,0 +1,139 @@
+.step-form {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.form-section {
+  background-color: #f9fafb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  margin-bottom: 1.5rem;
+  color: #1F2937;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #3B82F6;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.is-invalid {
+  border-color: #EF4444;
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #EF4444;
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.col {
+  flex: 1;
+}
+
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+.checkbox-group{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+  justify-content: space-between;
+}
+.radio-option {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+.checkbox-option input[type="checkbox"],
+.radio-option input[type="radio"] {
+  margin-left: 0.5rem;
+  width: 20px;
+  height: 20px;
+}
+
+.nested-form {
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid #e5e7eb;
+  animation: slideDown 0.3s ease-out;
+}
+
+
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+  
+  .col {
+    width: 100%;
+  }
+}

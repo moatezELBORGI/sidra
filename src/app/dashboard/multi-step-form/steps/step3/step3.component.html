@@ -1,0 +1,37 @@
+<div class="step-form">
+  <h2>Consommation de substances psychoactives (en dehors de tabac et l'alcool)</h2>
+
+  <div class="form-section" [formGroup]="substanceForm">
+      <div class="form-group">
+          <label class="form-group__label" for="spaConsumptionInEntourage">  Consommation de SPA dans l’entourage   </label>
+          <div class="radio-group">
+              <div class="radio-option">
+                  <label [for]="'spaConsumptionInEntourage-1'">Oui</label>
+
+                  <input
+                          type="radio"
+                          [id]="'spaConsumptionInEntourage-1'"
+                          formControlName="spaConsumptionInEntourage"
+
+
+                          [value]="true">
+              </div>
+              <div class="radio-option">
+                  <label [for]="'spaConsumptionInEntourage-2'">Non</label>
+
+                  <input
+                          type="radio"
+                          [id]="'spaConsumptionInEntourage-2'"
+                          formControlName="spaConsumptionInEntourage"
+                          [value]="false">
+              </div>
+
+          </div>
+
+          <div class="invalid-feedback"
+               *ngIf="substanceForm.get('spaConsumptionInEntourage')?.invalid && substanceForm.get('spaConsumptionInEntourage')?.touched">
+              Ce champ est requis
+          </div>
+      </div>
+  </div>
+</div>

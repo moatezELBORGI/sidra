@@ -1,0 +1,251 @@
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Mobile toggle button */
+.mobile-toggle-btn {
+    display: none;
+    position: fixed;
+    top: var(--spacing-2);
+    left: var(--spacing-2);
+    z-index: 1000;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+}
+
+.mobile-toggle-btn .toggle-icon {
+    font-size: 24px;
+}
+
+/* Mobile overlay */
+.mobile-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.mobile-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: var(--primary);
+    color: white;
+    transition: all 0.3s ease;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.collapsed {
+    width: 70px;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.toggle-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: var(--spacing-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-icon {
+    font-size: 24px;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: var(--spacing-2) 0;
+    overflow-y: auto;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-2) var(--spacing-3);
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover, .nav-group-header:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-item.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-left: 3px solid white;
+}
+
+.nav-icon {
+    font-size: 18px;
+    margin-right: var(--spacing-2);
+    min-width: 24px;
+    text-align: center;
+}
+
+.collapsed .nav-icon {
+    margin-right: 0;
+}
+
+.nav-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nav-group-header {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-2) var(--spacing-3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.expand-icon {
+    margin-left: auto;
+    font-size: 12px;
+}
+
+.sub-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.sub-menu.visible {
+    max-height: 200px;
+}
+
+.sub-icon {
+    font-size: 16px;
+}
+
+.logout-item {
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: var(--spacing-4);
+}
+
+.logout-item:hover {
+    color: white;
+}
+
+/* Main content */
+.main-content {
+    flex: 1;
+    transition: all 0.3s ease;
+    overflow-x: hidden;
+}
+
+
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-email {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.content {
+    padding: var(--spacing-3);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .mobile-toggle-btn {
+        display: flex;
+    }
+
+    .mobile-overlay {
+        display: block;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        transform: translateX(-100%);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .sidebar.mobile-visible {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        padding-top: 60px;
+    }
+
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 80;
+        width: 100%;
+        padding: var(--spacing-2);
+    }
+
+    .content {
+        padding: var(--spacing-2);
+    }
+}
