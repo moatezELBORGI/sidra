@@ -7,7 +7,8 @@
     <!-- Sidebar -->
     <div class="sidebar" [class.collapsed]="sidebarCollapsed" [class.mobile-visible]="!sidebarCollapsed">
         <div class="sidebar-header">
-            <h2 *ngIf="!sidebarCollapsed">SIDRA</h2>
+            <img *ngIf="!sidebarCollapsed" width="150px" src="../../assets/logo/logoMinistereWithoutBg.png" alt="Tunisian Flag" class="flag-logo">
+
             <span *ngIf="sidebarCollapsed" class="sidebar-logo">S</span>
             <button class="toggle-btn" (click)="toggleSidebar()">
                 <span class="toggle-icon">≡</span>

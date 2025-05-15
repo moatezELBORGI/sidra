@@ -295,6 +295,200 @@
       "status": "pending",
       "code": "FORM-PCFGIB9SG",
       "dateAjout": "2025-05-15T00:14:42.437Z"
+    },
+    {
+      "id": "7af1",
+      "governorat": null,
+      "structure": "2",
+      "structureInfo": {
+        "sector": 1,
+        "ongStructureId": null,
+        "structureId": "1",
+        "structureDemandedStructureId": "2",
+        "fName": "",
+        "lName": "",
+        "patientId": "qqsd",
+        "consultationDate": "2000-08-22",
+        "gender": "1",
+        "birthDate": "2000-08-22",
+        "nationalityUuidCountry": "1",
+        "residence": "2",
+        "governorateOfResidenceUuidGovernorate": null,
+        "cityOfResidenceUuidCity": null,
+        "countryOfResidenceUuidCountry": "1",
+        "consultancyFrame": 1,
+        "otherConsultancyFrame": null,
+        "originOfDemandSetUuidOriginOfDemands": [
+          {
+            "id": 1,
+            "selected": false
+          },
+          {
+            "id": 2,
+            "selected": false
+          },
+          {
+            "id": 3,
+            "selected": false
+          },
+          {
+            "id": 4,
+            "selected": false
+          },
+          {
+            "id": 5,
+            "selected": false
+          },
+          {
+            "id": 6,
+            "selected": false
+          },
+          {
+            "id": 7,
+            "selected": false
+          },
+          {
+            "id": -1,
+            "selected": false
+          }
+        ],
+        "otherOriginOfDemand": "",
+        "oldConsultancy": "false",
+        "oldConsultancyDate": null,
+        "oldConsultancyMotifUuidConsultancyMotif": null,
+        "otherOldConsultancyMotif": null,
+        "reasonForRecidivismUuidReasonForRecidivism": null,
+        "otherReasonForRecidivism": null,
+        "reasonForWithdrawalUuidReasonForWithdrawal": null,
+        "otherReasonForWithdrawal": null,
+        "familySituationIdFamilySituation": 1,
+        "otherFamilySituation": null,
+        "accommodationTypeIdAccommodationType": 1,
+        "otherAccommodationType": null,
+        "stableAccommodation": "false",
+        "professionUuidProfession": 1,
+        "schoolLevelUuidSchoolLevelSchoolLevel": 1,
+        "practiceSport": "false",
+        "regularPracticeSportWay": null,
+        "competitionSportWay": null,
+        "doping": null
+      },
+      "tobaccoAlcohol": {
+        "tobaccoConsumption": 2,
+        "ageOfTobaccoConsumption": null,
+        "tobaccoConsumedWithinThirtyDays": null,
+        "tobaccoConsumptionFrequencyUuidConsumptionFrequency": null,
+        "ageOfStoppingTobaccoConsumption": null,
+        "alcoholConsumption": false,
+        "ageOfAlcoholConsumption": null,
+        "alcoholConsumedWithinThirtyDays": null,
+        "alcoholConsumptionFrequencyUuidConsumptionFrequency": null
+      },
+      "substanceUse": {
+        "spaConsumptionInEntourage": false,
+        "spaConsumptionEntourageUuidEntourages": null,
+        "otherSpaConsumptionInEntourage": "",
+        "typesOfSpaConsumptionEntourageAnswers": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug": null,
+        "sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic": null,
+        "otherTypesOfSpaConsumptionEntourages": null,
+        "spaConsumptionOtherThanAlcoholAndTobacco": false,
+        "typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "morphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug": null,
+        "sedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic": null,
+        "otherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco": null,
+        "initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug": null,
+        "initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic": null,
+        "initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco": null,
+        "ageOfInitialTypesSedativeHypnoticOtherThanAlcoholAndTobacco": 50
+      },
+      "behaviorsAndTests": {
+        "usualRouteOfAdministrationOfPrincipalSubstanceUuidUsualRouteOfAdministration": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "otherUsualRouteOfAdministrationOfPrincipalSubstance": "",
+        "usualRouteOfAdministrationFrequencyOfPrincipalSubstanceUuidConsumptionFrequency": 7,
+        "ageOfConsumptionOfPrincipalSubstance": 50,
+        "notionOfSyringeSharingUuidNotionOfSyringeSharing": 1,
+        "vihTest": true,
+        "dateVihTest": "6months",
+        "vhcTest": false,
+        "dateVhcTest": null,
+        "vhbTest": false,
+        "dateVhbTest": null,
+        "supportForWeaning": true,
+        "whyNotSupportForWeaning": "",
+        "triedToQuit": false,
+        "withWhoTriedToQuitUuidTriedToQuit": null,
+        "healthStructureTriedToQuit": ""
+      },
+      "comorbidities": {
+        "hasPersonalPsychiatricComorbidity": true,
+        "personalPsychiatricComorbidityDetails": "sdfd",
+        "hasPersonalSomaticComorbidity": true,
+        "personalSomaticComorbidityDetails": "sdf",
+        "hasPartnerPsychiatricComorbidity": true,
+        "partnerPsychiatricComorbidityDetails": "sdf",
+        "hasPartnerSomaticComorbidity": true,
+        "partnerSomaticComorbidityDetails": "sqdsdf"
+      },
+      "spaDeaths": {
+        "nbDeathCauseBySpaInEntourage": 1,
+        "deathCauseBySpaInEntourage": "qsdqsd"
+      },
+      "status": "pending",
+      "code": "FORM-PLAGCE8WV",
+      "dateAjout": "2025-05-15T15:33:21.522Z"
     }
   ]
 }

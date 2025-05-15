@@ -353,4 +353,3 @@ export class Step4Component implements OnInit {
   }
 }
 
-export { Step4Component }

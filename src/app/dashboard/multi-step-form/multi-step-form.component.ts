@@ -44,12 +44,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class MultiStepFormComponent implements OnInit {
   steps = [
-    { label: 'Step 1', valid: false },
-    { label: 'Step 2', valid: false },
-    { label: 'Step 3', valid: false },
-    { label: 'Step 4', valid: false },
-    { label: 'Step 5', valid: false },
-    { label: 'Step 6', valid: false }
+    { label: 'Étape 1', valid: false },
+    { label: 'Étape 2', valid: false },
+    { label: 'Étape 3', valid: false },
+    { label: 'Étape 4', valid: false },
+    { label: 'Étape 5', valid: false },
+    { label: 'Étape 6', valid: false }
   ];
 
   currentStep = 1;

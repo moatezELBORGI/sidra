@@ -33,7 +33,7 @@ export class Step3Component implements OnInit {
   ngOnInit() {
     this.substanceForm = this.parentForm.get('substanceUse') as FormGroup;
     this.loadData();
-    this.setupFormValidation();
+    this.setupValidation();
 
     // Add required validators to main fields
     this.substanceForm.get('spaConsumptionInEntourage')?.setValidators([Validators.required]);
@@ -50,39 +50,6 @@ export class Step3Component implements OnInit {
     setTimeout(() => {
       this.restoreFieldVisibility();
     }, 100);
-
-    // Add validation for initial substance consumption
-    this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.valueChanges.subscribe(answers => {
-      if (Array.isArray(answers)) {
-        answers.forEach((answer, index) => {
-          const option = this.filteredTypesOfSpaConsumption[index];
-          if (option) {
-            if (answer === true) {
-              if (option.uuidTypesOfSpaConsumptionEntourages === 5) {
-                this.substanceForm.get('initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug')?.setValidators([Validators.required]);
-              } else if (option.uuidTypesOfSpaConsumptionEntourages === 8) {
-                this.substanceForm.get('initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic')?.setValidators([Validators.required]);
-              } else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
-                this.substanceForm.get('initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.setValidators([Validators.required]);
-              }
-            } else {
-              if (option.uuidTypesOfSpaConsumptionEntourages === 5) {
-                this.clearDependentFields(this.substanceForm, ['initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug']);
-              } else if (option.uuidTypesOfSpaConsumptionEntourages === 8) {
-                this.clearDependentFields(this.substanceForm, ['initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic']);
-              } else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
-                this.clearDependentFields(this.substanceForm, ['initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco']);
-              }
-            }
-          }
-        });
-
-        // Update validity
-        this.substanceForm.get('initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug')?.updateValueAndValidity();
-        this.substanceForm.get('initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic')?.updateValueAndValidity();
-        this.substanceForm.get('initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.updateValueAndValidity();
-      }
-    });
   }
 
   clearDependentFields(form: FormGroup, fieldsToReset: string[]) {
@@ -106,7 +73,7 @@ export class Step3Component implements OnInit {
     });
   }
 
-  setupFormValidation() {
+  setupValidation() {
     // Handle spaConsumptionInEntourage changes
     this.substanceForm.get('spaConsumptionInEntourage')?.valueChanges.subscribe(value => {
       const fieldsToReset = [
@@ -115,8 +82,7 @@ export class Step3Component implements OnInit {
         'typesOfSpaConsumptionEntourageAnswers',
         'morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug',
         'sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic',
-        'otherTypesOfSpaConsumptionEntourages',
-        'otherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco'
+        'otherTypesOfSpaConsumptionEntourages'
       ];
 
       if (!value) {
@@ -174,12 +140,29 @@ export class Step3Component implements OnInit {
           ?.updateValueAndValidity();
     });
 
+    // Add validation for Type d'entourage
     this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.valueChanges.subscribe(values => {
+      if (Array.isArray(values)) {
+        const allAnswered = values.every(value => value.selected !== undefined);
+        if (!allAnswered) {
+          this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.setErrors({ incomplete: true });
+        } else {
+          this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.setErrors(null);
+        }
+      }
       this.setupOtherEntourageValidation(values);
     });
 
+    // Add validation for Type de SPA consommées dans l'entourage
     this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.valueChanges.subscribe(answers => {
       if (Array.isArray(answers)) {
+        const allAnswered = answers.every(answer => answer !== null);
+        if (!allAnswered) {
+          this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.setErrors({ incomplete: true });
+        } else {
+          this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.setErrors(null);
+        }
+
         answers.forEach((answer, index) => {
           const option = this.typesOfSpaConsumptionEntourages[index];
           if (option) {
@@ -210,9 +193,16 @@ export class Step3Component implements OnInit {
       }
     });
 
-    // Similar validation for other SPA consumption
+    // Add validation for current drug use
     this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.valueChanges.subscribe(answers => {
       if (Array.isArray(answers)) {
+        const allAnswered = answers.every(answer => answer !== null);
+        if (!allAnswered) {
+          this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setErrors({ incomplete: true });
+        } else {
+          this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setErrors(null);
+        }
+
         answers.forEach((answer, index) => {
           const option = this.filteredTypesOfSpaConsumption[index];
           if (option) {
@@ -221,8 +211,7 @@ export class Step3Component implements OnInit {
                 this.substanceForm.get('morphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug')?.setValidators([Validators.required]);
               } else if (option.uuidTypesOfSpaConsumptionEntourages === 8) {
                 this.substanceForm.get('sedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic')?.setValidators([Validators.required]);
-              }
-              else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
+              } else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
                 this.substanceForm.get('otherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.setValidators([Validators.required]);
               }
             } else {
@@ -230,6 +219,8 @@ export class Step3Component implements OnInit {
                 this.clearDependentFields(this.substanceForm, ['morphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug']);
               } else if (option.uuidTypesOfSpaConsumptionEntourages === 8) {
                 this.clearDependentFields(this.substanceForm, ['sedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic']);
+              } else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
+                this.clearDependentFields(this.substanceForm, ['otherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco']);
               }
             }
           }
@@ -239,6 +230,46 @@ export class Step3Component implements OnInit {
         this.substanceForm.get('morphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug')?.updateValueAndValidity();
         this.substanceForm.get('sedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic')?.updateValueAndValidity();
         this.substanceForm.get('otherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.updateValueAndValidity();
+      }
+    });
+
+    // Add validation for initial substance consumption
+    this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.valueChanges.subscribe(answers => {
+      if (Array.isArray(answers)) {
+        const allAnswered = answers.every(answer => answer !== null);
+        if (!allAnswered) {
+          this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setErrors({ incomplete: true });
+        } else {
+          this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setErrors(null);
+        }
+
+        answers.forEach((answer, index) => {
+          const option = this.filteredTypesOfSpaConsumption[index];
+          if (option) {
+            if (answer === true) {
+              if (option.uuidTypesOfSpaConsumptionEntourages === 5) {
+                this.substanceForm.get('initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug')?.setValidators([Validators.required]);
+              } else if (option.uuidTypesOfSpaConsumptionEntourages === 8) {
+                this.substanceForm.get('initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic')?.setValidators([Validators.required]);
+              } else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
+                this.substanceForm.get('initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.setValidators([Validators.required]);
+              }
+            } else {
+              if (option.uuidTypesOfSpaConsumptionEntourages === 5) {
+                this.clearDependentFields(this.substanceForm, ['initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug']);
+              } else if (option.uuidTypesOfSpaConsumptionEntourages === 8) {
+                this.clearDependentFields(this.substanceForm, ['initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic']);
+              } else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
+                this.clearDependentFields(this.substanceForm, ['initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco']);
+              }
+            }
+          }
+        });
+
+        // Update validity
+        this.substanceForm.get('initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug')?.updateValueAndValidity();
+        this.substanceForm.get('initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic')?.updateValueAndValidity();
+        this.substanceForm.get('initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.updateValueAndValidity();
       }
     });
   }
@@ -574,3 +605,5 @@ export class Step3Component implements OnInit {
     return Array.isArray(values) && values.some(value => value.selected !== null);
   }
 }
+
+
