@@ -42,11 +42,7 @@ export class Step3Component implements OnInit {
     const requiredFields = [
       'spaConsumptionInEntourage',
       'spaConsumptionOtherThanAlcoholAndTobacco',
-      'ageOfInitialTypesSedativeHypnoticOtherThanAlcoholAndTobacco',
-      'spaConsumptionEntourageUuidEntourages',
-      'typesOfSpaConsumptionEntourageAnswers',
-      'typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages',
-      'initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages'
+      'ageOfInitialTypesSedativeHypnoticOtherThanAlcoholAndTobacco'
     ];
 
     requiredFields.forEach(field => {
@@ -66,26 +62,23 @@ export class Step3Component implements OnInit {
     // SPA consumption in entourage validation
     this.substanceForm.get('spaConsumptionInEntourage')?.valueChanges.subscribe(value => {
       if (value === true) {
-        // Make all dependent fields required
-        const dependentFields = [
-          'spaConsumptionEntourageUuidEntourages',
-          'typesOfSpaConsumptionEntourageAnswers'
-        ];
-
-        dependentFields.forEach(field => {
-          const control = this.substanceForm.get(field);
-          if (control) {
-            control.setValidators([Validators.required]);
-            control.updateValueAndValidity();
-          }
-        });
-
-        // Initialize arrays if needed
+        // Initialize arrays with null values to force validation
         if (!this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.value) {
           this.substanceForm.patchValue({
             typesOfSpaConsumptionEntourageAnswers: new Array(this.typesOfSpaConsumptionEntourages.length).fill(null)
           });
         }
+        
+        // Set validators for entourage options
+        this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.setValidators([
+          Validators.required,
+          (control) => {
+            const value = control.value;
+            if (!Array.isArray(value)) return { invalidFormat: true };
+            if (value.some(v => v === null)) return { incomplete: true };
+            return null;
+          }
+        ]);
       } else {
         // Clear validators and values when "No" is selected
         const fieldsToReset = [
@@ -111,25 +104,24 @@ export class Step3Component implements OnInit {
     // SPA consumption other than alcohol and tobacco validation
     this.substanceForm.get('spaConsumptionOtherThanAlcoholAndTobacco')?.valueChanges.subscribe(value => {
       if (value === true) {
-        // Make all dependent fields required
-        const dependentFields = [
-          'typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages'
-        ];
-
-        dependentFields.forEach(field => {
-          const control = this.substanceForm.get(field);
-          if (control) {
-            control.setValidators([Validators.required]);
-            control.updateValueAndValidity();
-          }
-        });
-
-        // Initialize arrays if needed
+        // Initialize arrays with null values to force validation
         if (!this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value) {
           this.substanceForm.patchValue({
-            typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages: new Array(this.filteredTypesOfSpaConsumption.length).fill(null)
+            typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages: 
+              new Array(this.filteredTypesOfSpaConsumption.length).fill(null)
           });
         }
+        
+        // Set validators for other SPA options
+        this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setValidators([
+          Validators.required,
+          (control) => {
+            const value = control.value;
+            if (!Array.isArray(value)) return { invalidFormat: true };
+            if (value.some(v => v === null)) return { incomplete: true };
+            return null;
+          }
+        ]);
       } else {
         // Clear validators and values when "No" is selected
         const fieldsToReset = [
@@ -150,85 +142,30 @@ export class Step3Component implements OnInit {
       }
     });
 
-    // Validate that all radio options are answered
-    this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.valueChanges.subscribe(answers => {
-      if (Array.isArray(answers)) {
-        const allAnswered = answers.every(answer => answer !== null);
-        if (!allAnswered) {
-          this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.setErrors({ incomplete: true });
-        } else {
-          this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.setErrors(null);
-        }
-
-        // Handle dependent fields validation
-        answers.forEach((answer, index) => {
-          const option = this.typesOfSpaConsumptionEntourages[index];
-          if (option) {
-            if (answer === true) {
-              if (option.uuidTypesOfSpaConsumptionEntourages === 5) {
-                this.substanceForm.get('morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug')?.setValidators([Validators.required]);
-              } else if (option.uuidTypesOfSpaConsumptionEntourages === 8) {
-                this.substanceForm.get('sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic')?.setValidators([Validators.required]);
-              } else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
-                this.substanceForm.get('otherTypesOfSpaConsumptionEntourages')?.setValidators([Validators.required]);
-              }
-            } else {
-              if (option.uuidTypesOfSpaConsumptionEntourages === 5) {
-                this.clearDependentFields(this.substanceForm, ['morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug']);
-              } else if (option.uuidTypesOfSpaConsumptionEntourages === 8) {
-                this.clearDependentFields(this.substanceForm, ['sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic']);
-              } else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
-                this.clearDependentFields(this.substanceForm, ['otherTypesOfSpaConsumptionEntourages']);
-              }
-            }
-          }
-        });
-
-        // Update validity of dependent fields
-        this.substanceForm.get('morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug')?.updateValueAndValidity();
-        this.substanceForm.get('sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic')?.updateValueAndValidity();
-        this.substanceForm.get('otherTypesOfSpaConsumptionEntourages')?.updateValueAndValidity();
+    // Initial substance type validation
+    this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setValidators([
+      Validators.required,
+      (control) => {
+        const value = control.value;
+        if (!Array.isArray(value)) return { invalidFormat: true };
+        if (value.some(v => v === null)) return { incomplete: true };
+        return null;
       }
-    });
+    ]);
 
-    // Validate that all initial substance type selections are answered
-    this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.valueChanges.subscribe(answers => {
-      if (Array.isArray(answers)) {
-        const allAnswered = answers.every(answer => answer !== null);
-        if (!allAnswered) {
-          this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setErrors({ incomplete: true });
-        } else {
-          this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setErrors(null);
-        }
+    // Initialize initial substance type array with null values
+    if (!this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value) {
+      this.substanceForm.patchValue({
+        initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages:
+          new Array(this.filteredTypesOfSpaConsumption.length).fill(null)
+      });
+    }
 
-        // Handle dependent fields validation
-        answers.forEach((answer, index) => {
-          const option = this.filteredTypesOfSpaConsumption[index];
-          if (option) {
-            if (answer === true) {
-              if (option.uuidTypesOfSpaConsumptionEntourages === 5) {
-                this.substanceForm.get('initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug')?.setValidators([Validators.required]);
-              } else if (option.uuidTypesOfSpaConsumptionEntourages === 8) {
-                this.substanceForm.get('initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic')?.setValidators([Validators.required]);
-              } else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
-                this.substanceForm.get('initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.setValidators([Validators.required]);
-              }
-            } else {
-              if (option.uuidTypesOfSpaConsumptionEntourages === 5) {
-                this.clearDependentFields(this.substanceForm, ['initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug']);
-              } else if (option.uuidTypesOfSpaConsumptionEntourages === 8) {
-                this.clearDependentFields(this.substanceForm, ['initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic']);
-              } else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
-                this.clearDependentFields(this.substanceForm, ['initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco']);
-              }
-            }
-          }
-        });
-
-        // Update validity of dependent fields
-        this.substanceForm.get('initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug')?.updateValueAndValidity();
-        this.substanceForm.get('initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic')?.updateValueAndValidity();
-        this.substanceForm.get('initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.updateValueAndValidity();
+    // Update validity of all controls
+    Object.keys(this.substanceForm.controls).forEach(key => {
+      const control = this.substanceForm.get(key);
+      if (control) {
+        control.updateValueAndValidity();
       }
     });
   }
