@@ -21,13 +21,52 @@ import {SchoolLevelDto} from "../../../../core/models/demanddrugs/SchoolLevelDto
 })
 export class Step1Component implements OnInit {
   @Input() parentForm!: FormGroup;
+  
+  structureForm!: FormGroup;
+  
+  // Options arrays
+  sectorOptions = [
+    { key: 1, label: 'Public' },
+    { key: 2, label: 'Private' }
+  ];
+  
+  ongStructureOptions: any[] = [];
+  ministerOptions: any[] = [];
+  structureDemandedOptions: any[] = [];
+  nationalityOptions: any[] = [];
+  gouvernoratOptions: any[] = [];
+  delegationOptions: any[] = [];
+  consultancyFrame: ConsultancyFrameDto[] = [];
+  originOfDemande: OriginOfDemandDto[] = [];
+  consultancyMotif: ConsultancyMotifDto[] = [];
+  reasonForRecidivism: ReasonForRecidivismDto[] = [];
+  reasonForWithdrawal: ReasonForWithdrawalDto[] = [];
+  familySituation: FamilySituationDto[] = [];
+  accommodationTypeDto: AccommodationTypeDto[] = [];
+  professionDto: ProfessionDto[] = [];
+  schoolLevel: SchoolLevelDto[] = [];
+
+  // Show/hide flags
+  showOtherOriginOfDemandInput = false;
+  showOtherOldConsultancyDateInput = false;
+  showRecidivismMotiveInput = false;
+  showOtherConsultancyMotifInput = false;
+  showReasonForWithdrawalInput = false;
+  ShowOtherReasonForWithdrawalInputInput = false;
+  ShowOtherReasonForRecidivismUuidReasonForRecidivismInput = false;
+  showOtherFamilySituationInput = false;
+  showOtherAccommodationTypeInput = false;
+  showPracticeSportInput = false;
+  showCompetitionSportWayInput = false;
 
   constructor(
-      private drugRequestService: DrugRequestService,
-      private fb: FormBuilder
+    private drugRequestService: DrugRequestService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    this.structureForm = this.parentForm.get('structureInfo') as FormGroup;
+    
     // Set required validators for default visible fields
     const requiredFields = [
       'sector',
@@ -57,70 +96,201 @@ export class Step1Component implements OnInit {
       }
     });
 
-    // Load all data first
-    this.loadAllData().then(() => {
-      // Setup validation after data is loaded
-      this.setupValidation();
-
-      // Restore visibility of fields based on form values
-      this.restoreFieldVisibility();
-
-      // Make sure "other" input is shown if needed
-      this.updateShowOtherOriginOfDemandInput();
-
-      // Important: Restore radio button selections after everything is loaded
-      setTimeout(() => {
-        this.restoreOriginOfDemandSelections();
-      });
-    });
+    this.loadAllData();
   }
 
-  // ... (keep all existing methods)
+  async loadAllData(): Promise<void> {
+    try {
+      // Load all necessary data from the service
+      const [
+        ongStructures,
+        ministers,
+        structures,
+        nationalities,
+        gouvernorats,
+        delegations,
+        consultancyFrames,
+        originOfDemands,
+        consultancyMotifs,
+        recidivismReasons,
+        withdrawalReasons,
+        familySituations,
+        accommodationTypes,
+        professions,
+        schoolLevels
+      ] = await Promise.all([
+        this.drugRequestService.getOngStructures(),
+        this.drugRequestService.getMinisters(),
+        this.drugRequestService.getStructures(),
+        this.drugRequestService.getNationalities(),
+        this.drugRequestService.getGouvernorats(),
+        this.drugRequestService.getDelegations(),
+        this.drugRequestService.getConsultancyFrames(),
+        this.drugRequestService.getOriginOfDemands(),
+        this.drugRequestService.getConsultancyMotifs(),
+        this.drugRequestService.getRecidivismReasons(),
+        this.drugRequestService.getWithdrawalReasons(),
+        this.drugRequestService.getFamilySituations(),
+        this.drugRequestService.getAccommodationTypes(),
+        this.drugRequestService.getProfessions(),
+        this.drugRequestService.getSchoolLevels()
+      ]);
 
-  ShowRecidivismMotiveOrSeverity(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement | null;
+      // Assign the loaded data to the component properties
+      this.ongStructureOptions = ongStructures;
+      this.ministerOptions = ministers;
+      this.structureDemandedOptions = structures;
+      this.nationalityOptions = nationalities;
+      this.gouvernoratOptions = gouvernorats;
+      this.delegationOptions = delegations;
+      this.consultancyFrame = consultancyFrames;
+      this.originOfDemande = originOfDemands;
+      this.consultancyMotif = consultancyMotifs;
+      this.reasonForRecidivism = recidivismReasons;
+      this.reasonForWithdrawal = withdrawalReasons;
+      this.familySituation = familySituations;
+      this.accommodationTypeDto = accommodationTypes;
+      this.professionDto = professions;
+      this.schoolLevel = schoolLevels;
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  }
 
-    if (selectElement) {
-      const selectedValue = selectElement.value;
-      this.showRecidivismMotiveInput = false;
-      this.showOtherConsultancyMotifInput = false;
-      this.showReasonForWithdrawalInput = false;
-      this.ShowOtherReasonForWithdrawalInputInput = false;
-      this.ShowOtherReasonForRecidivismUuidReasonForRecidivismInput = false;
+  // Visibility control methods
+  showOngList(): boolean {
+    return this.structureForm.get('sector')?.value === 2;
+  }
 
-      if (selectedValue !== '5') {
-        this.clearDependentFields(this.structureForm, [
-          'reasonForRecidivismUuidReasonForRecidivism',
-          'otherReasonForRecidivism'
-        ]);
+  showGovList(): boolean {
+    return this.structureForm.get('residence')?.value === '1';
+  }
+
+  showDelegation(): boolean {
+    return !!this.structureForm.get('governorateOfResidenceUuidGovernorate')?.value;
+  }
+
+  showResidenceCountryList(): boolean {
+    return this.structureForm.get('residence')?.value === '2';
+  }
+
+  // Event handlers
+  handleConsultancyFrameChange(event: Event, value: any): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.structureForm.patchValue({ consultancyFrame: value });
+      this.showOtherConsultancyMotifInput = value === -1;
+    }
+  }
+
+  onOriginOfDemandChange(event: Event, option: OriginOfDemandDto): void {
+    const checkbox = event.target as HTMLInputElement;
+    const originOfDemands = this.structureForm.get('originOfDemandSetUuidOriginOfDemands') as FormArray;
+    
+    if (checkbox.checked) {
+      originOfDemands.push(this.fb.control(option.uuidOriginOfDemand));
+      if (option.uuidOriginOfDemand === -1) {
+        this.showOtherOriginOfDemandInput = true;
       }
-      if (selectedValue !== '3') {
-        this.clearDependentFields(this.structureForm, [
-          'reasonForWithdrawalUuidReasonForWithdrawal',
-          'otherReasonForWithdrawal'
-        ]);
+    } else {
+      const index = originOfDemands.controls.findIndex(control => 
+        control.value === option.uuidOriginOfDemand
+      );
+      if (index >= 0) {
+        originOfDemands.removeAt(index);
       }
-      if (selectedValue !== '-1') {
-        this.clearDependentFields(this.structureForm, ['otherOldConsultancyMotif']);
-      }
-
-      if (selectedValue === '5') {
-        this.showRecidivismMotiveInput = true;
-        this.getReasonForRecidivismDto();
-        // Add required validator for recidivism reason
-        this.structureForm.get('reasonForRecidivismUuidReasonForRecidivism')?.setValidators([Validators.required]);
-        this.structureForm.get('reasonForRecidivismUuidReasonForRecidivism')?.updateValueAndValidity();
-      } else if (selectedValue === '3') {
-        this.showReasonForWithdrawalInput = true;
-        this.getReasonForWithdrawalDto();
-        // Add required validator for withdrawal reason
-        this.structureForm.get('reasonForWithdrawalUuidReasonForWithdrawal')?.setValidators([Validators.required]);
-        this.structureForm.get('reasonForWithdrawalUuidReasonForWithdrawal')?.updateValueAndValidity();
-      } else if (selectedValue === '-1') {
-        this.showOtherConsultancyMotifInput = true;
+      if (option.uuidOriginOfDemand === -1) {
+        this.showOtherOriginOfDemandInput = false;
       }
     }
   }
 
-  // ... (keep all other existing methods)
+  hasAnyOriginOfDemandSelected(): boolean {
+    const originOfDemands = this.structureForm.get('originOfDemandSetUuidOriginOfDemands') as FormArray;
+    return originOfDemands.length > 0;
+  }
+
+  showOtherOldConsultancyDate(show: boolean): void {
+    this.showOtherOldConsultancyDateInput = show;
+    if (!show) {
+      this.structureForm.patchValue({
+        oldConsultancyDate: null,
+        oldConsultancyMotifUuidConsultancyMotif: null,
+        otherOldConsultancyMotif: null
+      });
+    }
+  }
+
+  handleFamilySituationChange(event: Event, value: any): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.structureForm.patchValue({ familySituationIdFamilySituation: value });
+      this.showOtherFamilySituationInput = value === -1;
+    }
+  }
+
+  handleAccommodationTypeChange(event: Event, value: any): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.structureForm.patchValue({ accommodationTypeIdAccommodationType: value });
+      this.showOtherAccommodationTypeInput = value === -1;
+    }
+  }
+
+  handleProfessionChange(event: Event, value: any): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.structureForm.patchValue({ professionUuidProfession: value });
+    }
+  }
+
+  handleSchoolLevelChange(event: Event, value: any): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.structureForm.patchValue({ schoolLevelUuidSchoolLevelSchoolLevel: value });
+    }
+  }
+
+  showPracticeSport(show: boolean): void {
+    this.showPracticeSportInput = show;
+    if (!show) {
+      this.structureForm.patchValue({
+        regularPracticeSportWay: null,
+        competitionSportWay: null,
+        doping: null
+      });
+    }
+  }
+
+  competitionSportWay(isCompetition: boolean): void {
+    this.showCompetitionSportWayInput = isCompetition;
+    if (!isCompetition) {
+      this.structureForm.patchValue({ doping: null });
+    }
+  }
+
+  ShowRecidivismMotiveOrSeverity(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedValue = selectElement.value;
+
+    this.showRecidivismMotiveInput = false;
+    this.showOtherConsultancyMotifInput = false;
+    this.showReasonForWithdrawalInput = false;
+    this.ShowOtherReasonForWithdrawalInputInput = false;
+    this.ShowOtherReasonForRecidivismUuidReasonForRecidivismInput = false;
+
+    if (selectedValue === '5') {
+      this.showRecidivismMotiveInput = true;
+    } else if (selectedValue === '3') {
+      this.showReasonForWithdrawalInput = true;
+    } else if (selectedValue === '-1') {
+      this.showOtherConsultancyMotifInput = true;
+    }
+  }
+
+  private clearDependentFields(form: FormGroup, fields: string[]): void {
+    fields.forEach(field => {
+      form.get(field)?.patchValue(null);
+    });
+  }
 }
