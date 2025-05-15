@@ -384,6 +384,14 @@ export class Step3Component implements OnInit {
     this.substanceForm.get('initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.updateValueAndValidity();
   }
 
+  onOtherSpaTypeChange(index: number, value: boolean) {
+    const answers = [...this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value];
+    answers[index] = value;
+    this.substanceForm.patchValue({
+      typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages: answers
+    });
+  }
+
   updateShowOtherSpaConsumptionInput() {
     const values = this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.value;
     if (Array.isArray(values)) {
@@ -496,20 +504,10 @@ export class Step3Component implements OnInit {
     return answers?.every((answer: boolean | null) => answer !== null);
   }
 
-  onOtherSpaTypeChange(index: number, value: boolean) {
-    const answers = [...this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value];
-    answers[index] = value;
-    this.substanceForm.patchValue({
-      typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages: answers
-    });
-  }
-
   hasAnyEntourageSelected(): boolean {
     const values = this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.value;
     return Array.isArray(values) && values.some(value => value.selected !== null);
   }
 }
-
-export { Step3Component }
 
 export { Step3Component }
