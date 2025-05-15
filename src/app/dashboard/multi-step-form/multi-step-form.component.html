@@ -75,4 +75,9 @@
             </button>
         </div>
     </div>
+
+    <app-loading-popup 
+        [show]="isLoading"
+        [message]="'En cours d\'enregistrement...'"
+    ></app-loading-popup>
 </div>

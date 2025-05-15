@@ -13,6 +13,7 @@ import { Step6Component } from "./steps/step6/step6.component";
 import { NgIf } from "@angular/common";
 import { FormDataService } from '../../core/services/FormDataService.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LoadingPopupComponent } from '../../shared/loading-popup/loading-popup.component';
 
 @Component({
   selector: 'app-multi-step-form',
@@ -26,7 +27,8 @@ import { Router, ActivatedRoute } from '@angular/router';
     Step4Component,
     Step5Component,
     Step6Component,
-    NgIf
+    NgIf,
+    LoadingPopupComponent
   ],
   animations: [
     trigger('stepAnimation', [
@@ -59,6 +61,7 @@ export class MultiStepFormComponent implements OnInit {
   isEditMode = false;
   formId: string | null = null;
   showValidationError = false;
+  isLoading = false;
 
   stepFormsValid: Record<number, boolean> = {
     1: false,
@@ -182,6 +185,7 @@ export class MultiStepFormComponent implements OnInit {
     this.validationService.markFormGroupTouched(currentForm);
 
     if (currentForm.valid) {
+      this.isLoading = true;
       const formData = {
         governorat: this.form.get('structureInfo')?.get('governorateOfResidenceUuidGovernorate')?.value,
         structure: this.form.get('structureInfo')?.get('structureDemandedStructureId')?.value,
@@ -197,18 +201,26 @@ export class MultiStepFormComponent implements OnInit {
       if (this.isEditMode && this.formId) {
         this.formDataService.updateForm(this.formId, formData).subscribe({
           next: () => {
-            this.router.navigate(['/dashboard/drug-requests']);
+            setTimeout(() => {
+              this.isLoading = false;
+              this.router.navigate(['/dashboard/drug-requests']);
+            }, 1000);
           },
           error: (error) => {
+            this.isLoading = false;
             console.error('Error updating form:', error);
           }
         });
       } else {
         this.formDataService.addForm(formData).subscribe({
           next: () => {
-            this.router.navigate(['/dashboard/drug-requests']);
+            setTimeout(() => {
+              this.isLoading = false;
+              this.router.navigate(['/dashboard/drug-requests']);
+            }, 1000);
           },
           error: (error) => {
+            this.isLoading = false;
             console.error('Error submitting form:', error);
           }
         });
