@@ -691,5 +691,63 @@
       "code": "FORM-5TCD0HZ3N",
       "dateAjout": "2025-05-15T20:19:19.305Z"
     }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "email": "admin@sidra.tn",
+      "firstName": "Admin",
+      "lastName": "System",
+      "structure": "Ministère de la Santé",
+      "phone": "+216 71 000 000",
+      "password": "$2a$10$XKoNYmG5J5jX1Q9Q9Q9Q9OqQ9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q",
+      "permissions": {
+        "manageRequests": true,
+        "manageOffers": true,
+        "manageUsers": true,
+        "manageSettings": true,
+        "accessDashboard": true
+      },
+      "isBlocked": false,
+      "lastLogin": "2024-01-18T15:30:00Z",
+      "status": "online"
+    },
+    {
+      "id": "2",
+      "email": "user@sidra.tn",
+      "firstName": "User",
+      "lastName": "Test",
+      "structure": "Hôpital Charles Nicolle",
+      "phone": "+216 71 111 111",
+      "password": "$2a$10$XKoNYmG5J5jX1Q9Q9Q9Q9OqQ9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q9Q",
+      "permissions": {
+        "manageRequests": true,
+        "manageOffers": false,
+        "manageUsers": false,
+        "manageSettings": false,
+        "accessDashboard": true
+      },
+      "isBlocked": false,
+      "lastLogin": "2024-01-18T14:20:00Z",
+      "status": "offline"
+    }
+  ],
+  "structures": [
+    {
+      "id": "1",
+      "name": "Ministère de la Santé"
+    },
+    {
+      "id": "2",
+      "name": "Hôpital Charles Nicolle"
+    },
+    {
+      "id": "3",
+      "name": "Hôpital Habib Thameur"
+    },
+    {
+      "id": "4",
+      "name": "Hôpital La Rabta"
+    }
   ]
 }

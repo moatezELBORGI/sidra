@@ -8,7 +8,6 @@
     <div class="sidebar" [class.collapsed]="sidebarCollapsed" [class.mobile-visible]="!sidebarCollapsed">
         <div class="sidebar-header">
             <img *ngIf="!sidebarCollapsed" width="150px" src="../../assets/logo/logoMinistereWithoutBg.png" alt="Tunisian Flag" class="flag-logo">
-
             <span *ngIf="sidebarCollapsed" class="sidebar-logo">S</span>
             <button class="toggle-btn" (click)="toggleSidebar()">
                 <span class="toggle-icon">≡</span>
@@ -39,6 +38,13 @@
                             </a>
                         </li>
                     </ul>
+                </li>
+
+                <li>
+                    <a routerLink="/dashboard/users" routerLinkActive="active" class="nav-item">
+                        <span class="nav-icon">👥</span>
+                        <span class="nav-text" *ngIf="!sidebarCollapsed">Gestion utilisateurs</span>
+                    </a>
                 </li>
 
                 <li>
