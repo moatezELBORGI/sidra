@@ -1,91 +1,157 @@
 <div class="step-form">
-  <h2>Comorbidités</h2>
-  
-  <div class="form-section" [formGroup]="comorbiditiesForm">
-    <div class="comorbidity-group">
-      <div class="form-check">
-        <input 
-          type="checkbox" 
-          id="psychiatricDisorders" 
-          formControlName="psychiatricDisorders" 
-          class="form-check-input">
-        <label for="psychiatricDisorders" class="form-check-label">Troubles psychiatriques</label>
-      </div>
-      
-      <div *ngIf="comorbiditiesForm.get('psychiatricDisorders')?.value" class="comorbidity-details">
-        <label for="psychiatricDisordersDetails">Précisez les troubles</label>
-        <textarea 
-          id="psychiatricDisordersDetails" 
-          formControlName="psychiatricDisordersDetails" 
-          class="form-control"
-          rows="3"
-          placeholder="Spécifiez le(s) trouble(s) psychiatrique(s)"></textarea>
-      </div>
+    <h2>Comorbidités</h2>
+
+    <div class="form-section" [formGroup]="comorbiditiesForm">
+        <!-- Personal Psychiatric Comorbidities -->
+        <div class="form-group">
+            <label class="form-group__label">Comorbidités Psychiatriques personnelles</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <label [for]="'hasPersonalPsychiatricComorbidity-1'">Oui</label>
+                    <input
+                            type="radio"
+                            id="hasPersonalPsychiatricComorbidity-1"
+                            formControlName="hasPersonalPsychiatricComorbidity"
+                            [value]="true">
+                </div>
+                <div class="radio-option">
+                    <label [for]="'hasPersonalPsychiatricComorbidity-2'">Non</label>
+                    <input
+                            type="radio"
+                            id="hasPersonalPsychiatricComorbidity-2"
+                            formControlName="hasPersonalPsychiatricComorbidity"
+                            [value]="false">
+                </div>
+            </div>
+            <div class="error-message" *ngIf="comorbiditiesForm.get('hasPersonalPsychiatricComorbidity')?.invalid && comorbiditiesForm.get('hasPersonalPsychiatricComorbidity')?.touched">
+                Ce champ est obligatoire
+            </div>
+
+            <div *ngIf="comorbiditiesForm.get('hasPersonalPsychiatricComorbidity')?.value === true" class="nested-form">
+                <label class="form-group__label">Si oui, préciser</label>
+                <input
+                        type="text"
+                        formControlName="personalPsychiatricComorbidityDetails"
+                        class="form-control"
+                        placeholder="Précisez les comorbidités psychiatriques">
+                <div class="error-message" *ngIf="comorbiditiesForm.get('personalPsychiatricComorbidityDetails')?.invalid && comorbiditiesForm.get('personalPsychiatricComorbidityDetails')?.touched">
+                    Ce champ est obligatoire
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Somatic Comorbidities -->
+        <div class="form-group">
+            <label class="form-group__label">Comorbidités somatiques personnelles</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <label [for]="'hasPersonalSomaticComorbidity-1'">Oui</label>
+                    <input
+                            type="radio"
+                            id="hasPersonalSomaticComorbidity-1"
+                            formControlName="hasPersonalSomaticComorbidity"
+                            [value]="true">
+                </div>
+                <div class="radio-option">
+                    <label [for]="'hasPersonalSomaticComorbidity-2'">Non</label>
+                    <input
+                            type="radio"
+                            id="hasPersonalSomaticComorbidity-2"
+                            formControlName="hasPersonalSomaticComorbidity"
+                            [value]="false">
+                </div>
+            </div>
+            <div class="error-message" *ngIf="comorbiditiesForm.get('hasPersonalSomaticComorbidity')?.invalid && comorbiditiesForm.get('hasPersonalSomaticComorbidity')?.touched">
+                Ce champ est obligatoire
+            </div>
+
+            <div *ngIf="comorbiditiesForm.get('hasPersonalSomaticComorbidity')?.value === true" class="nested-form">
+                <label class="form-group__label">Si oui, préciser</label>
+                <input
+                        type="text"
+                        formControlName="personalSomaticComorbidityDetails"
+                        class="form-control"
+                        placeholder="Précisez les comorbidités somatiques">
+                <div class="error-message" *ngIf="comorbiditiesForm.get('personalSomaticComorbidityDetails')?.invalid && comorbiditiesForm.get('personalSomaticComorbidityDetails')?.touched">
+                    Ce champ est obligatoire
+                </div>
+            </div>
+        </div>
+
+        <!-- Partner Psychiatric Comorbidities -->
+        <div class="form-group">
+            <label class="form-group__label">Comorbidités Psychiatriques des partenaires</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <label [for]="'hasPartnerPsychiatricComorbidity-1'">Oui</label>
+                    <input
+                            type="radio"
+                            id="hasPartnerPsychiatricComorbidity-1"
+                            formControlName="hasPartnerPsychiatricComorbidity"
+                            [value]="true">
+                </div>
+                <div class="radio-option">
+                    <label [for]="'hasPartnerPsychiatricComorbidity-2'">Non</label>
+                    <input
+                            type="radio"
+                            id="hasPartnerPsychiatricComorbidity-2"
+                            formControlName="hasPartnerPsychiatricComorbidity"
+                            [value]="false">
+                </div>
+            </div>
+            <div class="error-message" *ngIf="comorbiditiesForm.get('hasPartnerPsychiatricComorbidity')?.invalid && comorbiditiesForm.get('hasPartnerPsychiatricComorbidity')?.touched">
+                Ce champ est obligatoire
+            </div>
+
+            <div *ngIf="comorbiditiesForm.get('hasPartnerPsychiatricComorbidity')?.value === true" class="nested-form">
+                <label class="form-group__label">Si oui, préciser</label>
+                <input
+                        type="text"
+                        formControlName="partnerPsychiatricComorbidityDetails"
+                        class="form-control"
+                        placeholder="Précisez les comorbidités psychiatriques">
+                <div class="error-message" *ngIf="comorbiditiesForm.get('partnerPsychiatricComorbidityDetails')?.invalid && comorbiditiesForm.get('partnerPsychiatricComorbidityDetails')?.touched">
+                    Ce champ est obligatoire
+                </div>
+            </div>
+        </div>
+
+        <!-- Partner Somatic Comorbidities -->
+        <div class="form-group">
+            <label class="form-group__label">Comorbidités somatiques des partenaires</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <label [for]="'hasPartnerSomaticComorbidity-1'">Oui</label>
+                    <input
+                            type="radio"
+                            id="hasPartnerSomaticComorbidity-1"
+                            formControlName="hasPartnerSomaticComorbidity"
+                            [value]="true">
+                </div>
+                <div class="radio-option">
+                    <label [for]="'hasPartnerSomaticComorbidity-2'">Non</label>
+                    <input
+                            type="radio"
+                            id="hasPartnerSomaticComorbidity-2"
+                            formControlName="hasPartnerSomaticComorbidity"
+                            [value]="false">
+                </div>
+            </div>
+            <div class="error-message" *ngIf="comorbiditiesForm.get('hasPartnerSomaticComorbidity')?.invalid && comorbiditiesForm.get('hasPartnerSomaticComorbidity')?.touched">
+                Ce champ est obligatoire
+            </div>
+
+            <div *ngIf="comorbiditiesForm.get('hasPartnerSomaticComorbidity')?.value === true" class="nested-form">
+                <label class="form-group__label">Si oui, préciser</label>
+                <input
+                        type="text"
+                        formControlName="partnerSomaticComorbidityDetails"
+                        class="form-control"
+                        placeholder="Précisez les comorbidités somatiques">
+                <div class="error-message" *ngIf="comorbiditiesForm.get('partnerSomaticComorbidityDetails')?.invalid && comorbiditiesForm.get('partnerSomaticComorbidityDetails')?.touched">
+                    Ce champ est obligatoire
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <div class="comorbidity-group">
-      <div class="form-check">
-        <input 
-          type="checkbox" 
-          id="cardiovascularDisease" 
-          formControlName="cardiovascularDisease" 
-          class="form-check-input">
-        <label for="cardiovascularDisease" class="form-check-label">Maladies cardiovasculaires</label>
-      </div>
-    </div>
-    
-    <div class="comorbidity-group">
-      <div class="form-check">
-        <input 
-          type="checkbox" 
-          id="respiratoryDisease" 
-          formControlName="respiratoryDisease" 
-          class="form-check-input">
-        <label for="respiratoryDisease" class="form-check-label">Maladies respiratoires</label>
-      </div>
-    </div>
-    
-    <div class="comorbidity-group">
-      <div class="form-check">
-        <input 
-          type="checkbox" 
-          id="liverDisease" 
-          formControlName="liverDisease" 
-          class="form-check-input">
-        <label for="liverDisease" class="form-check-label">Maladies hépatiques</label>
-      </div>
-    </div>
-    
-    <div class="comorbidity-group">
-      <div class="form-check">
-        <input 
-          type="checkbox" 
-          id="neurologicalDisorders" 
-          formControlName="neurologicalDisorders" 
-          class="form-check-input">
-        <label for="neurologicalDisorders" class="form-check-label">Troubles neurologiques</label>
-      </div>
-    </div>
-    
-    <div class="comorbidity-group">
-      <div class="form-check">
-        <input 
-          type="checkbox" 
-          id="otherHealthIssues" 
-          formControlName="otherHealthIssues" 
-          class="form-check-input">
-        <label for="otherHealthIssues" class="form-check-label">Autres problèmes de santé</label>
-      </div>
-      
-      <div *ngIf="comorbiditiesForm.get('otherHealthIssues')?.value" class="comorbidity-details">
-        <label for="otherHealthIssuesDetails">Précisez les problèmes de santé</label>
-        <textarea 
-          id="otherHealthIssuesDetails" 
-          formControlName="otherHealthIssuesDetails" 
-          class="form-control"
-          rows="3"
-          placeholder="Spécifiez le(s) problème(s) de santé"></textarea>
-      </div>
-    </div>
-  </div>
 </div>

@@ -1,37 +1,321 @@
 <div class="step-form">
-  <h2>Consommation de substances psychoactives (en dehors de tabac et l'alcool)</h2>
+    <h2>Consommation de substances psychoactives</h2>
 
-  <div class="form-section" [formGroup]="substanceForm">
-      <div class="form-group">
-          <label class="form-group__label" for="spaConsumptionInEntourage">  Consommation de SPA dans l’entourage   </label>
-          <div class="radio-group">
-              <div class="radio-option">
-                  <label [for]="'spaConsumptionInEntourage-1'">Oui</label>
+    <div class="form-section" [formGroup]="substanceForm">
+        <div class="form-group">
+            <label class="form-group__label">Consommation de SPA dans l'entourage</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <label [for]="'spaConsumptionInEntourage-1'">Oui</label>
+                    <input
+                            type="radio"
+                            id="spaConsumptionInEntourage-1"
+                            formControlName="spaConsumptionInEntourage"
+                            [value]="true">
+                </div>
+                <div class="radio-option">
+                    <label [for]="'spaConsumptionInEntourage-2'">Non</label>
+                    <input
+                            type="radio"
+                            id="spaConsumptionInEntourage-2"
+                            formControlName="spaConsumptionInEntourage"
+                            [value]="false">
+                </div>
+            </div>
+            <div class="error-message" *ngIf="substanceForm.get('spaConsumptionInEntourage')?.invalid && substanceForm.get('spaConsumptionInEntourage')?.touched">
+                Ce champ est obligatoire
+            </div>
 
-                  <input
-                          type="radio"
-                          [id]="'spaConsumptionInEntourage-1'"
-                          formControlName="spaConsumptionInEntourage"
+            <div *ngIf="showEntourageDetails()" class="nested-form">
+                <div class="form-group">
+                    <label class="form-group__label">Type d'entourage</label>
+                    <div class="checkbox-group">
+                        <ng-container *ngFor="let option of entourageOptions">
+                            <div class="checkbox-option">
+                                <label [for]="'entourage-' + option.uuidEntourage">{{ option.entourageLabel }}</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <label [for]="option.uuidEntourage + '-yes'">Oui</label>
+                                        <input
+                                                type="radio"
+                                                [id]="option.uuidEntourage + '-yes'"
+                                                [name]="'entourage-' + option.uuidEntourage"
+                                                (change)="onEntourageOptionChange($event, option)"
+                                                [value]="true"
+                                                [checked]="selectedEntourageOptions[option.uuidEntourage] === true">
+                                    </div>
+                                    <div class="radio-option">
+                                        <label [for]="option.uuidEntourage + '-no'">Non</label>
+                                        <input
+                                                type="radio"
+                                                [id]="option.uuidEntourage + '-no'"
+                                                [name]="'entourage-' + option.uuidEntourage"
+                                                (change)="onEntourageOptionChange($event, option)"
+                                                [value]="false"
+                                                [checked]="selectedEntourageOptions[option.uuidEntourage] === false">
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="option.uuidEntourage === -1 && showOtherSpaConsumptionInput" class="nested-form">
+                                <label class="form-group__label">Préciser autre</label>
+                                <input
+                                        type="text"
+                                        formControlName="otherSpaConsumptionInEntourage"
+                                        class="form-control"
+                                        placeholder="Préciser">
+                                <div class="error-message" *ngIf="substanceForm.get('otherSpaConsumptionInEntourage')?.invalid && substanceForm.get('otherSpaConsumptionInEntourage')?.touched">
+                                    Ce champ est obligatoire
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="error-message" *ngIf="!hasAnyEntourageSelected() && substanceForm.get('spaConsumptionEntourageUuidEntourages')?.touched">
+                        Veuillez sélectionner au moins une option
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="form-group" *ngIf="showEntourageDetails()">
+            <label class="form-group__label">Type de SPA consommées dans l'entourage</label>
+            <div class="checkbox-group">
+                <ng-container *ngFor="let option of typesOfSpaConsumptionEntourages; let i = index">
+                    <div class="checkbox-option">
+                        <label [for]="'spa-' + option.uuidTypesOfSpaConsumptionEntourages">{{ option.typesOfSpaConsumptionEntouragesLabel }}</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <label [for]="option.uuidTypesOfSpaConsumptionEntourages + '-yes'">Oui</label>
+                                <input
+                                        type="radio"
+                                        [id]="option.uuidTypesOfSpaConsumptionEntourages + '-yes'"
+                                        [name]="'spa-' + option.uuidTypesOfSpaConsumptionEntourages"
+                                        (change)="onSpaTypeChange(i, true)"
+                                        [checked]="substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.value[i] === true">
+                            </div>
+                            <div class="radio-option">
+                                <label [for]="option.uuidTypesOfSpaConsumptionEntourages + '-no'">Non</label>
+                                <input
+                                        type="radio"
+                                        [id]="option.uuidTypesOfSpaConsumptionEntourages + '-no'"
+                                        [name]="'spa-' + option.uuidTypesOfSpaConsumptionEntourages"
+                                        (change)="onSpaTypeChange(i, false)"
+                                        [checked]="substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.value[i] === false">
+                            </div>
+                        </div>
+                    </div>
 
-                          [value]="true">
-              </div>
-              <div class="radio-option">
-                  <label [for]="'spaConsumptionInEntourage-2'">Non</label>
+                    <div *ngIf="option.uuidTypesOfSpaConsumptionEntourages === 5 && substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.value[i] === true" class="nested-form">
+                        <label class="form-group__label">Préciser la substance</label>
+                        <select formControlName="morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug" class="form-control">
+                            <option value="">Sélectionner une substance</option>
+                            <option *ngFor="let drug of morphineDrugs" [value]="drug.idMorphineDrug">{{ drug.morphineDrugTypeLabel }}</option>
+                        </select>
+                        <div class="error-message" *ngIf="substanceForm.get('morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug')?.invalid && substanceForm.get('morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug')?.touched">
+                            Ce champ est obligatoire
+                        </div>
+                    </div>
 
-                  <input
-                          type="radio"
-                          [id]="'spaConsumptionInEntourage-2'"
-                          formControlName="spaConsumptionInEntourage"
-                          [value]="false">
-              </div>
+                    <div *ngIf="option.uuidTypesOfSpaConsumptionEntourages === 8 && substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.value[i] === true" class="nested-form">
+                        <label class="form-group__label">Préciser le sédatif</label>
+                        <select formControlName="sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic" class="form-control">
+                            <option value="">Sélectionner un sédatif</option>
+                            <option *ngFor="let sedative of sedativeHypnotics" [value]="sedative.uuidHypnoticsAndSedatives">{{ sedative.hypnoticsAndSedativesLabel }}</option>
+                        </select>
+                        <div class="error-message" *ngIf="substanceForm.get('sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic')?.invalid && substanceForm.get('sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic')?.touched">
+                            Ce champ est obligatoire
+                        </div>
+                    </div>
 
-          </div>
+                    <div *ngIf="option.uuidTypesOfSpaConsumptionEntourages === -1 && substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.value[i] === true" class="nested-form">
+                        <label class="form-group__label">Préciser autre</label>
+                        <input
+                                type="text"
+                                formControlName="otherTypesOfSpaConsumptionEntourages"
+                                class="form-control"
+                                placeholder="Préciser">
+                        <div class="error-message" *ngIf="substanceForm.get('otherTypesOfSpaConsumptionEntourages')?.invalid && substanceForm.get('otherTypesOfSpaConsumptionEntourages')?.touched">
+                            Ce champ est obligatoire
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="error-message" *ngIf="!areAllOptionsAnswered() && substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.touched">
+                Veuillez répondre à toutes les options
+            </div>
+        </div>
 
-          <div class="invalid-feedback"
-               *ngIf="substanceForm.get('spaConsumptionInEntourage')?.invalid && substanceForm.get('spaConsumptionInEntourage')?.touched">
-              Ce champ est requis
-          </div>
-      </div>
-  </div>
+        <div class="form-group">
+            <label class="form-group__label">Consommez-vous des SPA en dehors de l'alcool et tabac?</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <label [for]="'spaConsumptionOtherThanAlcoholAndTobacco-1'">Oui</label>
+                    <input
+                            type="radio"
+                            id="spaConsumptionOtherThanAlcoholAndTobacco-1"
+                            formControlName="spaConsumptionOtherThanAlcoholAndTobacco"
+                            [value]="true">
+                </div>
+                <div class="radio-option">
+                    <label [for]="'spaConsumptionOtherThanAlcoholAndTobacco-2'">Non</label>
+                    <input
+                            type="radio"
+                            id="spaConsumptionOtherThanAlcoholAndTobacco-2"
+                            formControlName="spaConsumptionOtherThanAlcoholAndTobacco"
+                            [value]="false">
+                </div>
+            </div>
+            <div class="error-message" *ngIf="substanceForm.get('spaConsumptionOtherThanAlcoholAndTobacco')?.invalid && substanceForm.get('spaConsumptionOtherThanAlcoholAndTobacco')?.touched">
+                Ce champ est obligatoire
+            </div>
+
+            <div *ngIf="showOtherSpaConsumptionDetails()" class="nested-form">
+                <label class="form-group__label">Quelle(s) est/sont la/les drogue(s) utilisée(s) actuellement chez le patient</label>
+                <div class="checkbox-group">
+                    <ng-container *ngFor="let option of filteredTypesOfSpaConsumption; let i = index">
+                        <div class="checkbox-option">
+                            <label [for]="'other-spa-' + option.uuidTypesOfSpaConsumptionEntourages">{{ option.typesOfSpaConsumptionEntouragesLabel }}</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <label [for]="option.uuidTypesOfSpaConsumptionEntourages + '-other-yes'">Oui</label>
+                                    <input
+                                            type="radio"
+                                            [id]="option.uuidTypesOfSpaConsumptionEntourages + '-other-yes'"
+                                            [name]="'other-spa-' + option.uuidTypesOfSpaConsumptionEntourages"
+                                            (change)="onOtherSpaTypeChange(i, true)"
+                                            [checked]="substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value[i] === true">
+                                </div>
+                                <div class="radio-option">
+                                    <label [for]="option.uuidTypesOfSpaConsumptionEntourages + '-other-no'">Non</label>
+                                    <input
+                                            type="radio"
+                                            [id]="option.uuidTypesOfSpaConsumptionEntourages + '-other-no'"
+                                            [name]="'other-spa-' + option.uuidTypesOfSpaConsumptionEntourages"
+                                            (change)="onOtherSpaTypeChange(i, false)"
+                                            [checked]="substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value[i] === false">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="option.uuidTypesOfSpaConsumptionEntourages === 5 && substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value[i] === true" class="nested-form">
+                            <label class="form-group__label">Préciser la substance</label>
+                            <select formControlName="morphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug" class="form-control">
+                                <option value="">Sélectionner une substance</option>
+                                <option *ngFor="let drug of morphineDrugs" [value]="drug.idMorphineDrug">{{ drug.morphineDrugTypeLabel }}</option>
+                            </select>
+                            <div class="error-message" *ngIf="substanceForm.get('morphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug')?.invalid && substanceForm.get('morphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug')?.touched">
+                                Ce champ est obligatoire
+                            </div>
+                        </div>
+
+                        <div *ngIf="option.uuidTypesOfSpaConsumptionEntourages === 8 && substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value[i] === true" class="nested-form">
+                            <label class="form-group__label">Préciser le sédatif</label>
+                            <select formControlName="sedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic" class="form-control">
+                                <option value="">Sélectionner un sédatif</option>
+                                <option *ngFor="let sedative of sedativeHypnotics" [value]="sedative.uuidHypnoticsAndSedatives">{{ sedative.hypnoticsAndSedativesLabel }}</option>
+                            </select>
+                            <div class="error-message" *ngIf="substanceForm.get('sedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic')?.invalid && substanceForm.get('sedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic')?.touched">
+                                Ce champ est obligatoire
+                            </div>
+                        </div>
+
+                        <div *ngIf="option.uuidTypesOfSpaConsumptionEntourages === -1 && substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value[i] === true" class="nested-form">
+                            <label class="form-group__label">Préciser autre</label>
+                            <input
+                                    type="text"
+                                    formControlName="otherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco"
+                                    class="form-control"
+                                    placeholder="Préciser">
+                            <div class="error-message" *ngIf="substanceForm.get('otherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.invalid && substanceForm.get('otherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.touched">
+                                Ce champ est obligatoire
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="error-message" *ngIf="!areAllOtherSpaOptionsAnswered() && substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.touched">
+                    Veuillez répondre à toutes les options
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group__label">Quelle est la substance d'initiation de consommation chez le patient</label>
+            <div class="checkbox-group">
+                <ng-container *ngFor="let option of filteredTypesOfSpaConsumption; let i = index">
+                    <div class="checkbox-option">
+                        <label [for]="'initial-spa-' + option.uuidTypesOfSpaConsumptionEntourages">{{ option.typesOfSpaConsumptionEntouragesLabel }}</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <label [for]="option.uuidTypesOfSpaConsumptionEntourages + '-initial-yes'">Oui</label>
+                                <input
+                                        type="radio"
+                                        [id]="option.uuidTypesOfSpaConsumptionEntourages + '-initial-yes'"
+                                        [name]="'initial-spa-' + option.uuidTypesOfSpaConsumptionEntourages"
+                                        (change)="onInitialSpaTypeChange(i, true)"
+                                        [checked]="substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value[i] === true">
+                            </div>
+                            <div class="radio-option">
+                                <label [for]="option.uuidTypesOfSpaConsumptionEntourages + '-initial-no'">Non</label>
+                                <input
+                                        type="radio"
+                                        [id]="option.uuidTypesOfSpaConsumptionEntourages + '-initial-no'"
+                                        [name]="'initial-spa-' + option.uuidTypesOfSpaConsumptionEntourages"
+                                        (change)="onInitialSpaTypeChange(i, false)"
+                                        [checked]="substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value[i] === false">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="option.uuidTypesOfSpaConsumptionEntourages === 5 && substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value[i] === true" class="nested-form">
+                        <label class="form-group__label">Préciser la substance</label>
+                        <select formControlName="initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug" class="form-control">
+                            <option value="">Sélectionner une substance</option>
+                            <option *ngFor="let drug of morphineDrugs" [value]="drug.idMorphineDrug">{{ drug.morphineDrugTypeLabel }}</option>
+                        </select>
+                        <div class="error-message" *ngIf="substanceForm.get('initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug')?.invalid && substanceForm.get('initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug')?.touched">
+                            Ce champ est obligatoire
+                        </div>
+                    </div>
+
+                    <div *ngIf="option.uuidTypesOfSpaConsumptionEntourages === 8 && substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value[i] === true" class="nested-form">
+                        <label class="form-group__label">Préciser le sédatif</label>
+                        <select formControlName="initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic" class="form-control">
+                            <option value="">Sélectionner un sédatif</option>
+                            <option *ngFor="let sedative of sedativeHypnotics" [value]="sedative.uuidHypnoticsAndSedatives">{{ sedative.hypnoticsAndSedativesLabel }}</option>
+                        </select>
+                        <div class="error-message" *ngIf="substanceForm.get('initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic')?.invalid && substanceForm.get('initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic')?.touched">
+                            Ce champ est obligatoire
+                        </div>
+                    </div>
+
+                    <div *ngIf="option.uuidTypesOfSpaConsumptionEntourages === -1 && substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value[i] === true" class="nested-form">
+                        <label class="form-group__label">Préciser autre</label>
+                        <input
+                                type="text"
+                                formControlName="initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco"
+                                class="form-control"
+                                placeholder="Préciser">
+                        <div class="error-message" *ngIf="substanceForm.get('initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.invalid && substanceForm.get('initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco')?.touched">
+                            Ce champ est obligatoire
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="error-message" *ngIf="!areAllInitialSpaOptionsAnswered() && substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.touched">
+                Veuillez répondre à toutes les options
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-group__label">Age d'initiation à la substance d'initiation de consommation</label>
+            <input
+                    type="number"
+                    formControlName="ageOfInitialTypesSedativeHypnoticOtherThanAlcoholAndTobacco"
+                    class="form-control"
+                    min="1"
+                    placeholder="Entrez l'âge">
+            <div class="error-message" *ngIf="substanceForm.get('ageOfInitialTypesSedativeHypnoticOtherThanAlcoholAndTobacco')?.invalid && substanceForm.get('ageOfInitialTypesSedativeHypnoticOtherThanAlcoholAndTobacco')?.touched">
+                Ce champ est obligatoire
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,0 +1,300 @@
+{
+  "forms": [
+    {
+      "id": "1",
+      "code": "FORM-ABC123",
+      "dateAjout": "2024-01-15T10:30:00Z",
+      "status": "pending",
+      "governorat": "Tunis",
+      "structure": "Hôpital Charles Nicolle",
+      "structureInfo": {
+        "sector": "Public",
+        "ministry": "Santé",
+        "patientCode": "P001",
+        "consultationDate": "2024-01-15",
+        "gender": "1",
+        "birthDate": "1990-05-15",
+        "nationality": "Tunisie",
+        "residence": "1"
+      },
+      "tobaccoAlcohol": {
+        "tobaccoConsumption": "1",
+        "ageOfTobaccoConsumption": 18,
+        "tobaccoConsumedWithinThirtyDays": true,
+        "alcoholConsumption": true,
+        "ageOfAlcoholConsumption": 20
+      },
+      "substanceUse": {
+        "spaConsumptionInEntourage": true,
+        "spaConsumptionOtherThanAlcoholAndTobacco": true
+      },
+      "behaviorsAndTests": {
+        "ageOfConsumptionOfPrincipalSubstance": 19,
+        "vihTest": true,
+        "dateVihTest": "3months",
+        "supportForWeaning": true
+      },
+      "comorbidities": {
+        "hasPersonalPsychiatricComorbidity": false,
+        "hasPersonalSomaticComorbidity": false,
+        "hasPartnerPsychiatricComorbidity": false,
+        "hasPartnerSomaticComorbidity": false
+      },
+      "spaDeaths": {
+        "nbDeathCauseBySpaInEntourage": 0
+      }
+    },
+    {
+      "id": "2",
+      "code": "FORM-DEF456",
+      "dateAjout": "2024-01-16T14:20:00Z",
+      "status": "approved",
+      "governorat": "Ariana",
+      "structure": "Hôpital Abderrahmen Mami",
+      "structureInfo": {
+        "sector": "Public",
+        "ministry": "Santé",
+        "patientCode": "P002",
+        "consultationDate": "2024-01-16",
+        "gender": "2",
+        "birthDate": "1985-08-20",
+        "nationality": "Tunisie",
+        "residence": "1"
+      },
+      "tobaccoAlcohol": {
+        "tobaccoConsumption": "2",
+        "alcoholConsumption": false
+      },
+      "substanceUse": {
+        "spaConsumptionInEntourage": false,
+        "spaConsumptionOtherThanAlcoholAndTobacco": false
+      },
+      "behaviorsAndTests": {
+        "vihTest": false,
+        "vhcTest": false,
+        "vhbTest": false,
+        "supportForWeaning": false
+      },
+      "comorbidities": {
+        "hasPersonalPsychiatricComorbidity": true,
+        "personalPsychiatricComorbidityDetails": "Anxiety disorder",
+        "hasPersonalSomaticComorbidity": false,
+        "hasPartnerPsychiatricComorbidity": false,
+        "hasPartnerSomaticComorbidity": false
+      },
+      "spaDeaths": {
+        "nbDeathCauseBySpaInEntourage": 0
+      }
+    },
+    {
+      "id": "3",
+      "code": "FORM-GHI789",
+      "dateAjout": "2024-01-17T09:15:00Z",
+      "status": "rejected",
+      "governorat": "Ben Arous",
+      "structure": "Hôpital Régional",
+      "structureInfo": {
+        "sector": "Public",
+        "ministry": "Santé",
+        "patientCode": "P003",
+        "consultationDate": "2024-01-17",
+        "gender": "1",
+        "birthDate": "1995-03-10",
+        "nationality": "Tunisie",
+        "residence": "1"
+      },
+      "tobaccoAlcohol": {
+        "tobaccoConsumption": "3",
+        "ageOfTobaccoConsumption": 17,
+        "ageOfStoppingTobaccoConsumption": 25,
+        "alcoholConsumption": true,
+        "ageOfAlcoholConsumption": 18
+      },
+      "substanceUse": {
+        "spaConsumptionInEntourage": true,
+        "spaConsumptionOtherThanAlcoholAndTobacco": true
+      },
+      "behaviorsAndTests": {
+        "ageOfConsumptionOfPrincipalSubstance": 18,
+        "vihTest": true,
+        "dateVihTest": "6months",
+        "supportForWeaning": true
+      },
+      "comorbidities": {
+        "hasPersonalPsychiatricComorbidity": false,
+        "hasPersonalSomaticComorbidity": true,
+        "personalSomaticComorbidityDetails": "Hypertension",
+        "hasPartnerPsychiatricComorbidity": false,
+        "hasPartnerSomaticComorbidity": false
+      },
+      "spaDeaths": {
+        "nbDeathCauseBySpaInEntourage": 1,
+        "deathCauseBySpaInEntourage": "Overdose"
+      }
+    },
+    {
+      "id": "fd6d",
+      "governorat": null,
+      "structure": "2",
+      "structureInfo": {
+        "sector": 1,
+        "ongStructureId": null,
+        "structureId": "1",
+        "structureDemandedStructureId": "2",
+        "fName": "",
+        "lName": "",
+        "patientId": "qsd",
+        "consultationDate": "2000-08-22",
+        "gender": "1",
+        "birthDate": "2000-08-22",
+        "nationalityUuidCountry": "1",
+        "residence": "2",
+        "governorateOfResidenceUuidGovernorate": null,
+        "cityOfResidenceUuidCity": null,
+        "countryOfResidenceUuidCountry": "1",
+        "consultancyFrame": 1,
+        "otherConsultancyFrame": "",
+        "originOfDemandSetUuidOriginOfDemands": [
+          {
+            "id": 1,
+            "selected": false
+          },
+          {
+            "id": 2,
+            "selected": false
+          },
+          {
+            "id": 3,
+            "selected": false
+          },
+          {
+            "id": 4,
+            "selected": false
+          },
+          {
+            "id": 5,
+            "selected": false
+          },
+          {
+            "id": 6,
+            "selected": false
+          },
+          {
+            "id": 7,
+            "selected": false
+          },
+          {
+            "id": -1,
+            "selected": false
+          }
+        ],
+        "otherOriginOfDemand": "",
+        "oldConsultancy": "false",
+        "oldConsultancyDate": null,
+        "oldConsultancyMotifUuidConsultancyMotif": null,
+        "otherOldConsultancyMotif": null,
+        "reasonForRecidivismUuidReasonForRecidivism": null,
+        "otherReasonForRecidivism": null,
+        "reasonForWithdrawalUuidReasonForWithdrawal": null,
+        "otherReasonForWithdrawal": null,
+        "familySituationIdFamilySituation": 4,
+        "otherFamilySituation": "",
+        "accommodationTypeIdAccommodationType": 1,
+        "otherAccommodationType": "",
+        "stableAccommodation": "false",
+        "professionUuidProfession": 1,
+        "schoolLevelUuidSchoolLevelSchoolLevel": 1,
+        "practiceSport": "true",
+        "regularPracticeSportWay": "true",
+        "competitionSportWay": "true",
+        "doping": "false"
+      },
+      "tobaccoAlcohol": {
+        "tobaccoConsumption": 2,
+        "ageOfTobaccoConsumption": null,
+        "tobaccoConsumedWithinThirtyDays": null,
+        "tobaccoConsumptionFrequencyUuidConsumptionFrequency": null,
+        "ageOfStoppingTobaccoConsumption": null,
+        "alcoholConsumption": false,
+        "ageOfAlcoholConsumption": null,
+        "alcoholConsumedWithinThirtyDays": null,
+        "alcoholConsumptionFrequencyUuidConsumptionFrequency": null
+      },
+      "substanceUse": {
+        "spaConsumptionInEntourage": false,
+        "spaConsumptionEntourageUuidEntourages": null,
+        "otherSpaConsumptionInEntourage": "",
+        "typesOfSpaConsumptionEntourageAnswers": [],
+        "morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug": null,
+        "sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic": null,
+        "otherTypesOfSpaConsumptionEntourages": null,
+        "spaConsumptionOtherThanAlcoholAndTobacco": false,
+        "typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages": [],
+        "morphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug": null,
+        "sedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic": null,
+        "otherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco": null,
+        "initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug": null,
+        "initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic": null,
+        "initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco": null,
+        "ageOfInitialTypesSedativeHypnoticOtherThanAlcoholAndTobacco": 50
+      },
+      "behaviorsAndTests": {
+        "usualRouteOfAdministrationOfPrincipalSubstanceUuidUsualRouteOfAdministration": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "otherUsualRouteOfAdministrationOfPrincipalSubstance": "",
+        "usualRouteOfAdministrationFrequencyOfPrincipalSubstanceUuidConsumptionFrequency": 5,
+        "ageOfConsumptionOfPrincipalSubstance": 50,
+        "notionOfSyringeSharingUuidNotionOfSyringeSharing": 1,
+        "vihTest": false,
+        "dateVihTest": null,
+        "vhcTest": false,
+        "dateVhcTest": null,
+        "vhbTest": true,
+        "dateVhbTest": "12months",
+        "supportForWeaning": false,
+        "whyNotSupportForWeaning": "qsd",
+        "triedToQuit": false,
+        "withWhoTriedToQuitUuidTriedToQuit": null,
+        "healthStructureTriedToQuit": ""
+      },
+      "comorbidities": {
+        "hasPersonalPsychiatricComorbidity": false,
+        "personalPsychiatricComorbidityDetails": "",
+        "hasPersonalSomaticComorbidity": false,
+        "personalSomaticComorbidityDetails": "",
+        "hasPartnerPsychiatricComorbidity": false,
+        "partnerPsychiatricComorbidityDetails": "",
+        "hasPartnerSomaticComorbidity": false,
+        "partnerSomaticComorbidityDetails": ""
+      },
+      "spaDeaths": {
+        "nbDeathCauseBySpaInEntourage": 5,
+        "deathCauseBySpaInEntourage": "qsqsd"
+      },
+      "status": "pending",
+      "code": "FORM-PCFGIB9SG",
+      "dateAjout": "2025-05-15T00:14:42.437Z"
+    }
+  ]
+}

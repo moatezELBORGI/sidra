@@ -1,112 +1,149 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { DrugRequestService } from '../../core/services/drug-request.service';
-import { DrugRequest } from '../../core/models/demanddrugs/drug-request.model';
+import { Router, RouterModule } from '@angular/router';
+import { FormDataService } from '../../core/services/FormDataService.service';
+import { FormData } from '../../core/models/FormData';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-drug-requests',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './drug-requests.component.html',
   styleUrl: './drug-requests.component.css'
 })
 export class DrugRequestsComponent implements OnInit {
-  requests: DrugRequest[] = [];
-  filteredRequests: DrugRequest[] = [];
+  forms: FormData[] = [];
+  filteredForms: FormData[] = [];
   isLoading = true;
-  
+
   // Sorting
-  sortField: keyof DrugRequest = 'id';
-  sortDirection: 'asc' | 'desc' = 'asc';
-  
+  sortField: keyof FormData = 'dateAjout';
+  sortDirection: 'asc' | 'desc' = 'desc';
+
   // Filtering
   activeFilter: string = 'all';
   searchTerm: string = '';
-  
-  constructor(private drugRequestService: DrugRequestService) {}
-  
+  dateFilter: string = '';
+  governoratFilter: string = '';
+  structureFilter: string = '';
+
+  // Filter options
+  gouvernorats: string[] = ['Tunis', 'Ariana', 'Ben Arous'];
+  structures: string[] = ['Hôpital Charles Nicolle', 'Hôpital Abderrahmen Mami', 'Hôpital Régional'];
+
+  constructor(
+      private formDataService: FormDataService,
+      private router: Router
+  ) {}
+
   ngOnInit(): void {
-    this.loadRequests();
+    this.loadForms();
   }
-  
-  loadRequests(): void {
+
+  loadForms(): void {
     this.isLoading = true;
-    
-    this.drugRequestService.getRequests().subscribe({
-      next: (requests) => {
-        this.requests = requests;
+
+    this.formDataService.getForms().subscribe({
+      next: (forms) => {
+        this.forms = forms;
         this.applyFilters();
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading requests', error);
+        console.error('Error loading forms', error);
         this.isLoading = false;
       }
     });
   }
-  
-  sortTable(field: keyof DrugRequest): void {
+
+  editForm(id: string): void {
+    this.router.navigate(['/dashboard/drug-requests-form'], {
+      queryParams: { id: id, mode: 'edit' }
+    });
+  }
+
+  sortTable(field: keyof FormData): void {
     if (this.sortField === field) {
-      // Toggle direction if clicking on the same field
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
-      // Set new field and default to ascending
       this.sortField = field;
       this.sortDirection = 'asc';
     }
-    
+
     this.applyFilters();
   }
-  
+
   filterByStatus(status: string): void {
     this.activeFilter = status;
     this.applyFilters();
   }
-  
+
   onSearch(event: Event): void {
     this.searchTerm = (event.target as HTMLInputElement).value.toLowerCase();
     this.applyFilters();
   }
-  
+
+  onDateFilterChange(date: string): void {
+    this.dateFilter = date;
+    this.applyFilters();
+  }
+
   applyFilters(): void {
-    let filtered = [...this.requests];
-    
+    let filtered = [...this.forms];
+
     // Apply status filter
     if (this.activeFilter !== 'all') {
-      filtered = filtered.filter(r => r.status === this.activeFilter);
+      filtered = filtered.filter(f => f.status === this.activeFilter);
     }
-    
-    // Apply search filter if there's a search term
+
+    // Apply date filter
+    if (this.dateFilter) {
+      const filterDate = new Date(this.dateFilter).setHours(0, 0, 0, 0);
+      filtered = filtered.filter(f => {
+        const formDate = new Date(f.dateAjout).setHours(0, 0, 0, 0);
+        return formDate === filterDate;
+      });
+    }
+
+    // Apply governorat filter
+    if (this.governoratFilter) {
+      filtered = filtered.filter(f => f.governorat === this.governoratFilter);
+    }
+
+    // Apply structure filter
+    if (this.structureFilter) {
+      filtered = filtered.filter(f => f.structure === this.structureFilter);
+    }
+
+    // Apply search filter
     if (this.searchTerm) {
-      filtered = filtered.filter(r => 
-        r.nationalId.toLowerCase().includes(this.searchTerm) ||
-        r.sector.toLowerCase().includes(this.searchTerm) ||
-        r.ministry.toLowerCase().includes(this.searchTerm) ||
-        r.structure.toLowerCase().includes(this.searchTerm) ||
-        r.patientCode.toLowerCase().includes(this.searchTerm)
+      filtered = filtered.filter(f =>
+          f.code.toLowerCase().includes(this.searchTerm) ||
+          f.governorat.toLowerCase().includes(this.searchTerm) ||
+          f.structure.toLowerCase().includes(this.searchTerm)
       );
     }
-    
+
     // Apply sorting
     filtered.sort((a, b) => {
       const valueA = a[this.sortField];
       const valueB = b[this.sortField];
-      
+
       if (typeof valueA === 'string' && typeof valueB === 'string') {
-        return this.sortDirection === 'asc' 
-          ? valueA.localeCompare(valueB) 
-          : valueB.localeCompare(valueA);
+        return this.sortDirection === 'asc'
+            ? valueA.localeCompare(valueB)
+            : valueB.localeCompare(valueA);
       } else {
-        return this.sortDirection === 'asc' 
-          ? (valueA < valueB ? -1 : 1) 
-          : (valueA > valueB ? -1 : 1);
+        return this.sortDirection === 'asc'
+            ? (valueA < valueB ? -1 : 1)
+            : (valueA > valueB ? -1 : 1);
       }
     });
-    
-    this.filteredRequests = filtered;
+
+    this.filteredForms = filtered;
   }
-  
+
   getStatusLabel(status: string): string {
     switch (status) {
       case 'pending': return 'En attente';

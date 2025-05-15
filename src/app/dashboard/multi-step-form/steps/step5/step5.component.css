@@ -16,7 +16,7 @@ h2 {
   font-weight: 600;
 }
 
-.comorbidity-group {
+.substance-group {
   padding: 1rem;
   margin-bottom: 1rem;
   border: 1px solid #e5e7eb;
@@ -24,9 +24,14 @@ h2 {
   transition: all 0.3s ease;
 }
 
-.comorbidity-group:hover {
+.substance-group:hover {
   border-color: #d1d5db;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.substance-header {
+  display: flex;
+  align-items: center;
 }
 
 .form-check {
@@ -46,11 +51,15 @@ h2 {
   cursor: pointer;
 }
 
-.comorbidity-details {
+.substance-details {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px dashed #e5e7eb;
   animation: slideDown 0.3s ease-out;
+}
+
+.form-group {
+  margin-bottom: 1rem;
 }
 
 label {
@@ -74,7 +83,12 @@ label {
   outline: 0;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
-
+.nested-form {
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid #e5e7eb;
+  animation: slideDown 0.3s ease-out;
+}
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -97,4 +111,102 @@ label {
     max-height: 500px;
     transform: translateY(0);
   }
+}
+
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+.checkbox-group{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+  justify-content: space-between;
+}
+.radio-option {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+.checkbox-option input[type="checkbox"],
+.radio-option input[type="radio"] {
+  margin-left: 0.5rem;
+  width: 20px;
+  height: 20px;
+}
+
+.testing-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.testing-group {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.testing-group:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.test-result {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #e5e7eb;
+  animation: slideDown 0.3s ease-out;
+}
+
+.testing-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: white;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.testing-table th,
+.testing-table td {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.testing-table th {
+  background-color: var(--background);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.testing-table td {
+  vertical-align: top;
+}
+
+.testing-table .radio-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.testing-table .radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.testing-table input[type="radio"] {
+  margin: 0;
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
 @Injectable({
     providedIn: 'root'
@@ -32,7 +32,7 @@ export class FormsService {
                 countryOfResidenceUuidCountry: [''],
                 consultancyFrame: [null, Validators.required],
                 otherConsultancyFrame: [''],
-                originOfDemandSetUuidOriginOfDemands: this.fb.array([]),
+                originOfDemandSetUuidOriginOfDemands:  [[]],
                 otherOriginOfDemand: [''],
                 oldConsultancy: ['', Validators.required],
                 oldConsultancyDate: [''],
@@ -62,7 +62,7 @@ export class FormsService {
                 tobaccoConsumedWithinThirtyDays: [''],
                 tobaccoConsumptionFrequencyUuidConsumptionFrequency: [''],
                 ageOfStoppingTobaccoConsumption: [''],
-                alcoholConsumption: [''],
+                alcoholConsumption: ['', Validators.required],
                 ageOfAlcoholConsumption: [''],
                 alcoholConsumedWithinThirtyDays: [''],
                 alcoholConsumptionFrequencyUuidConsumptionFrequency: ['']
@@ -70,52 +70,64 @@ export class FormsService {
 
             // Partie 3: Consommation de substances psychoactives
             substanceUse: this.fb.group({
-                spaConsumptionInEntourage: [],
-                cannabisFrequency: [''],
-                cocaine: [false],
-                cocaineFrequency: [''],
-                amphetamines: [false],
-                amphetaminesFrequency: [''],
-                opioids: [false],
-                opioidsFrequency: [''],
-                hallucinogens: [false],
-                hallucinogensFrequency: [''],
-                otherSubstances: [false],
-                otherSubstancesDetails: ['']
+                spaConsumptionInEntourage: [null, Validators.required],
+                spaConsumptionEntourageUuidEntourages: [[]],
+                otherSpaConsumptionInEntourage: [''],
+                typesOfSpaConsumptionEntourageAnswers: [[]],
+                morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug: [''],
+                sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic: [''],
+                otherTypesOfSpaConsumptionEntourages: [''],
+                spaConsumptionOtherThanAlcoholAndTobacco:[null, Validators.required],
+                typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages: [[]],
+                morphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug:[''],
+                sedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic:[''],
+                otherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco:[''],
+
+                initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages:[[]],
+                initialTypesMorphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug:[''],
+                initialTypesSedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic:[''],
+                initialTypesOtherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco:[''],
+                ageOfInitialTypesSedativeHypnoticOtherThanAlcoholAndTobacco:['']
+
+
             }),
 
             // Partie 4: Comportements liés à la consommation des SPA et tests de dépistage
             behaviorsAndTests: this.fb.group({
-                injectionUse: [false],
-                needleSharing: [false],
-                sexualRiskBehaviors: [false],
-                hivTested: [false],
-                hivResult: [''],
-                hcvTested: [false],
-                hcvResult: [''],
-                hbvTested: [false],
-                hbvResult: ['']
+                usualRouteOfAdministrationOfPrincipalSubstanceUuidUsualRouteOfAdministration: [[]],
+                otherUsualRouteOfAdministrationOfPrincipalSubstance: [''],
+                usualRouteOfAdministrationFrequencyOfPrincipalSubstanceUuidConsumptionFrequency: [[]],
+                ageOfConsumptionOfPrincipalSubstance: [],
+                notionOfSyringeSharingUuidNotionOfSyringeSharing: [[]],
+                vihTest: [],
+                dateVihTest: [''],
+                vhcTest: [],
+                dateVhcTest: [''],
+                vhbTest: [],
+                dateVhbTest: [''],
+                supportForWeaning:[''],
+                whyNotSupportForWeaning:[''],
+                triedToQuit:[''],
+                withWhoTriedToQuitUuidTriedToQuit:[''],
+                healthStructureTriedToQuit:['']
             }),
 
             // Partie 5: Comorbidités
             comorbidities: this.fb.group({
-                psychiatricDisorders: [false],
-                psychiatricDisordersDetails: [''],
-                cardiovascularDisease: [false],
-                respiratoryDisease: [false],
-                liverDisease: [false],
-                neurologicalDisorders: [false],
-                otherHealthIssues: [false],
-                otherHealthIssuesDetails: ['']
+                hasPersonalPsychiatricComorbidity: [],
+                personalPsychiatricComorbidityDetails: ['',Validators.required],
+                hasPersonalSomaticComorbidity: [],
+                personalSomaticComorbidityDetails: ['',Validators.required],
+                hasPartnerPsychiatricComorbidity: [],
+                partnerPsychiatricComorbidityDetails: ['',Validators.required],
+                hasPartnerSomaticComorbidity: [],
+                partnerSomaticComorbidityDetails: ['',Validators.required]
             }),
 
             // Partie 6: Décès induit par les SPA dans l'entourage
             spaDeaths: this.fb.group({
-                deathsInSocialCircle: [false],
-                numberOfDeaths: [0],
-                relationshipToDeceased: [''],
-                substanceInvolved: [''],
-                overdoseInvolved: [false]
+                nbDeathCauseBySpaInEntourage: ['',Validators.required],
+                deathCauseBySpaInEntourage: ['']
             })
         });
     }

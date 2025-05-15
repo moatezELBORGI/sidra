@@ -14,7 +14,6 @@
                             type="radio"
                             [id]="'tobaccoConsumption-' + option.key"
                             formControlName="tobaccoConsumption"
-
                             [value]="option.key">
                 </div>
             </div>
@@ -41,27 +40,26 @@
             </div>
             <div *ngIf="showCigarettesFieldsIfSmoker()" class="nested-form">
                 <div class="form-group">
-                    <label for="ageOfTobaccoConsumption">(Si Fumeur) Consommation de tabac/produits tabagiques durant
+                    <label for="tobaccoConsumedWithinThirtyDays">(Si Fumeur) Consommation de tabac/produits tabagiques durant
                         les 30 derniers jours </label>
                     <div class="radio-group">
                         <div class="radio-option">
-
-                            <label>
-                                <input
-                                        type="radio" formControlName="tobaccoConsumedWithinThirtyDays" [value]="true">
-                                Oui
-                            </label>
+                            <label [for]="'tobaccoConsumedWithinThirtyDays-1'">Oui</label>
+                            <input
+                                    type="radio"
+                                    id="tobaccoConsumedWithinThirtyDays-1"
+                                    formControlName="tobaccoConsumedWithinThirtyDays"
+                                    [value]="true">
                         </div>
                         <div class="radio-option">
-
-                            <label>
-                                <input
-                                        type="radio" formControlName="tobaccoConsumedWithinThirtyDays" [value]="false">
-                                Non
-                            </label>
+                            <label [for]="'tobaccoConsumedWithinThirtyDays-2'">Non</label>
+                            <input
+                                    type="radio"
+                                    id="tobaccoConsumedWithinThirtyDays-2"
+                                    formControlName="tobaccoConsumedWithinThirtyDays"
+                                    [value]="false">
                         </div>
                     </div>
-
                     <div class="invalid-feedback"
                          *ngIf="tobaccoForm.get('tobaccoConsumedWithinThirtyDays')?.invalid && tobaccoForm.get('tobaccoConsumedWithinThirtyDays')?.touched">
                         Ce champ est requis
@@ -69,38 +67,31 @@
                 </div>
                 <div *ngIf="showConsumptionFrequencyTypeSmoker()" class="nested-form">
                     <div class="form-group">
-                        <label  >(Si Fumeur durant les 30 derniers jours oui) Fréquence de
+                        <label>(Si Fumeur durant les 30 derniers jours oui) Fréquence de
                             consommation de tabac/produits tabagiques durant les 30 derniers jours
-
                         </label>
                         <div class="checkbox-group">
-                            <div *ngFor="let option of consumptionFrequencyType1 ; let index = index"
-                                 class="checkbox-option">
-                                <label [for]="'tobaccoConsumptionFrequencyUuidConsumptionFrequency-' + option.uuidConsumptionFrequency">{{ option.consumptionFrequencyMotif }}</label>
-
+                            <div *ngFor="let option of consumptionFrequencyType1" class="checkbox-option">
+                                <label [for]="'tobaccoConsumptionFrequencyUuidConsumptionFrequency-' + option.uuidConsumptionFrequency">
+                                    {{ option.consumptionFrequencyMotif }}
+                                </label>
                                 <input
                                         type="checkbox"
                                         [id]="'tobaccoConsumptionFrequencyUuidConsumptionFrequency-' + option.uuidConsumptionFrequency"
-                                        formControlName="tobaccoConsumptionFrequencyUuidConsumptionFrequency"
-                                        [value]="option.uuidConsumptionFrequency"
-
-
-                                >
+                                        [checked]="tobaccoForm.get('tobaccoConsumptionFrequencyUuidConsumptionFrequency')?.value === option.uuidConsumptionFrequency"
+                                        (change)="handleTobaccoFrequencyChange($event, option.uuidConsumptionFrequency)">
                             </div>
                         </div>
                         <div class="invalid-feedback"
                              *ngIf="tobaccoForm.get('tobaccoConsumptionFrequencyUuidConsumptionFrequency')?.invalid && tobaccoForm.get('tobaccoConsumptionFrequencyUuidConsumptionFrequency')?.touched">
                             Veuillez sélectionner une fréquence
                         </div>
-
                     </div>
                 </div>
-
-
             </div>
             <div *ngIf="showCigarettesFieldsIfExSmoker()" class="nested-form">
                 <div class="form-group">
-                    <label for="ageOfStoppingTobaccoConsumption">(Si Ex-fumeur), Age de l’arrêt de la consommation de
+                    <label for="ageOfStoppingTobaccoConsumption">(Si Ex-fumeur), Age de l'arrêt de la consommation de
                         tabac </label>
                     <input
                             type="number"
@@ -113,44 +104,36 @@
                         L'age est requis
                     </div>
                 </div>
-
             </div>
         </div>
 
-
         <div class="form-group">
-            <label class="form-group__label" for="alcoholConsumption"> Consommation d’alcool </label>
+            <label class="form-group__label" for="alcoholConsumption"> Consommation d'alcool </label>
             <div class="radio-group">
                 <div class="radio-option">
                     <label [for]="'alcoholConsumption-1'">Oui</label>
-
                     <input
                             type="radio"
                             [id]="'alcoholConsumption-1'"
                             formControlName="alcoholConsumption"
-
-
                             [value]="true">
                 </div>
                 <div class="radio-option">
                     <label [for]="'alcoholConsumption-2'">Non</label>
-
                     <input
                             type="radio"
                             [id]="'alcoholConsumption-2'"
                             formControlName="alcoholConsumption"
                             [value]="false">
                 </div>
-
             </div>
-
             <div class="invalid-feedback"
                  *ngIf="tobaccoForm.get('alcoholConsumption')?.invalid && tobaccoForm.get('alcoholConsumption')?.touched">
                 Ce champ est requis
             </div>
             <div *ngIf="showAlcoholFields()" class="nested-form">
                 <div class="form-group">
-                    <label for="ageOfAlcoholConsumption">(Si alcool oui) Age lors de la première consommation d’alcool
+                    <label for="ageOfAlcoholConsumption">(Si alcool oui) Age lors de la première consommation d'alcool
                     </label>
                     <input
                             type="number"
@@ -164,65 +147,55 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="alcoholConsumedWithinThirtyDays">(Si alcool oui) Consommation d’alcool durant les 30 derniers jours	 </label>
+                    <label for="alcoholConsumedWithinThirtyDays">(Si alcool oui) Consommation d'alcool durant les 30
+                        derniers jours </label>
                     <div class="radio-group">
                         <div class="radio-option">
-
-                            <label>
-                                <input
-                                        type="radio" formControlName="alcoholConsumedWithinThirtyDays" [value]="true">
-                                Oui
-                            </label>
+                            <label [for]="'alcoholConsumedWithinThirtyDays-1'">Oui</label>
+                            <input
+                                    type="radio"
+                                    id="alcoholConsumedWithinThirtyDays-1"
+                                    formControlName="alcoholConsumedWithinThirtyDays"
+                                    [value]="true">
                         </div>
                         <div class="radio-option">
-
-                            <label>
-                                <input
-                                        type="radio" formControlName="alcoholConsumedWithinThirtyDays" [value]="false">
-                                Non
-                            </label>
+                            <label [for]="'alcoholConsumedWithinThirtyDays-2'">Non</label>
+                            <input
+                                    type="radio"
+                                    id="alcoholConsumedWithinThirtyDays-2"
+                                    formControlName="alcoholConsumedWithinThirtyDays"
+                                    [value]="false">
                         </div>
                     </div>
-
                     <div class="invalid-feedback"
                          *ngIf="tobaccoForm.get('alcoholConsumedWithinThirtyDays')?.invalid && tobaccoForm.get('alcoholConsumedWithinThirtyDays')?.touched">
                         Ce champ est requis
                     </div>
                     <div *ngIf="showConsumptionFrequencyTypeAlcohol()" class="nested-form">
                         <div class="form-group">
-                            <label >(Si alcool durant les 30 derniers jours oui) Fréquence de consommation d’alcool durant les 30 derniers jours
-
-
+                            <label>(Si alcool durant les 30 derniers jours oui) Fréquence de consommation d'alcool durant
+                                les 30 derniers jours
                             </label>
                             <div class="checkbox-group">
-                                <div *ngFor="let option of consumptionFrequencyType1 ; let index = index"
-                                     class="checkbox-option">
-                                    <label [for]="'alcoholConsumptionFrequencyUuidConsumptionFrequency-' + option.uuidConsumptionFrequency">{{ option.consumptionFrequencyMotif }}</label>
-
+                                <div *ngFor="let option of consumptionFrequencyType1" class="checkbox-option">
+                                    <label [for]="'alcoholConsumptionFrequencyUuidConsumptionFrequency-' + option.uuidConsumptionFrequency">
+                                        {{ option.consumptionFrequencyMotif }}
+                                    </label>
                                     <input
                                             type="checkbox"
                                             [id]="'alcoholConsumptionFrequencyUuidConsumptionFrequency-' + option.uuidConsumptionFrequency"
-                                            formControlName="alcoholConsumptionFrequencyUuidConsumptionFrequency"
-                                            [value]="option.uuidConsumptionFrequency"
-
-
-                                    >
+                                            [checked]="tobaccoForm.get('alcoholConsumptionFrequencyUuidConsumptionFrequency')?.value === option.uuidConsumptionFrequency"
+                                            (change)="handleAlcoholFrequencyChange($event, option.uuidConsumptionFrequency)">
                                 </div>
                             </div>
                             <div class="invalid-feedback"
                                  *ngIf="tobaccoForm.get('alcoholConsumptionFrequencyUuidConsumptionFrequency')?.invalid && tobaccoForm.get('alcoholConsumptionFrequencyUuidConsumptionFrequency')?.touched">
                                 Veuillez sélectionner une fréquence
                             </div>
-
                         </div>
                     </div>
-
                 </div>
-
-
             </div>
-
         </div>
-
     </div>
 </div>

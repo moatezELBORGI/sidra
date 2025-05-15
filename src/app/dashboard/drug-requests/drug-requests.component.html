@@ -16,6 +16,35 @@
             >
         </div>
 
+        <div class="date-filter">
+            <input
+                    type="date"
+                    [ngModel]="dateFilter | date:'yyyy-MM-dd'"
+                    (ngModelChange)="onDateFilterChange($event)"
+                    class="form-control"
+                    placeholder="Filtrer par date">
+        </div>
+
+        <div class="governorat-filter">
+            <select
+                    [(ngModel)]="governoratFilter"
+                    (ngModelChange)="applyFilters()"
+                    class="form-control">
+                <option value="">Tous les gouvernorats</option>
+                <option *ngFor="let gov of gouvernorats" [value]="gov">{{ gov }}</option>
+            </select>
+        </div>
+
+        <div class="structure-filter">
+            <select
+                    [(ngModel)]="structureFilter"
+                    (ngModelChange)="applyFilters()"
+                    class="form-control">
+                <option value="">Toutes les structures</option>
+                <option *ngFor="let struct of structures" [value]="struct">{{ struct }}</option>
+            </select>
+        </div>
+
         <div class="status-filters">
             <button
                     class="filter-btn"
@@ -48,65 +77,58 @@
         </div>
     </div>
 
-    <div class="table-container" *ngIf="requests.length > 0; else noData">
+    <div class="table-container" *ngIf="filteredForms.length > 0; else noData">
         <table class="requests-table">
             <thead>
             <tr>
-                <th (click)="sortTable('nationalId')">
-                    Identifiant national
-                    <span class="sort-icon" *ngIf="sortField === 'nationalId'">
-                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
-                </span>
+                <th (click)="sortTable('code')">
+                    Code
+                    <span class="sort-icon" *ngIf="sortField === 'code'">
+                        {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                    </span>
                 </th>
-                <th (click)="sortTable('sector')">
-                    Secteur
-                    <span class="sort-icon" *ngIf="sortField === 'sector'">
-                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
-                </span>
+                <th (click)="sortTable('dateAjout')">
+                    Date d'ajout
+                    <span class="sort-icon" *ngIf="sortField === 'dateAjout'">
+                        {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                    </span>
                 </th>
-                <th (click)="sortTable('ministry')">
-                    Ministère
-                    <span class="sort-icon" *ngIf="sortField === 'ministry'">
-                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
-                </span>
+                <th (click)="sortTable('governorat')">
+                    Gouvernorat
+                    <span class="sort-icon" *ngIf="sortField === 'governorat'">
+                        {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                    </span>
                 </th>
                 <th (click)="sortTable('structure')">
                     Structure
                     <span class="sort-icon" *ngIf="sortField === 'structure'">
-                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
-                </span>
-                </th>
-                <th (click)="sortTable('patientCode')">
-                    Code du patient
-                    <span class="sort-icon" *ngIf="sortField === 'patientCode'">
-                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
-                </span>
+                        {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                    </span>
                 </th>
                 <th (click)="sortTable('status')">
-                    Statut de la demande
+                    Statut
                     <span class="sort-icon" *ngIf="sortField === 'status'">
-                  {{ sortDirection === 'asc' ? '↑' : '↓' }}
-                </span>
+                        {{ sortDirection === 'asc' ? '↑' : '↓' }}
+                    </span>
                 </th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let request of filteredRequests">
-                <td>{{ request.nationalId }}</td>
-                <td>{{ request.sector }}</td>
-                <td>{{ request.ministry }}</td>
-                <td>{{ request.structure }}</td>
-                <td>{{ request.patientCode }}</td>
+            <tr *ngFor="let form of filteredForms">
+                <td>{{ form.code }}</td>
+                <td>{{ form.dateAjout | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ form.governorat }}</td>
+                <td>{{ form.structure }}</td>
                 <td>
-                <span class="status-badge" [class]="request.status">
-                  {{ getStatusLabel(request.status) }}
-                </span>
+                    <span class="status-badge" [class]="form.status">
+                        {{ getStatusLabel(form.status) }}
+                    </span>
                 </td>
                 <td>
                     <div class="action-buttons">
                         <button class="action-btn view-btn" title="Voir">👁️</button>
-                        <button class="action-btn edit-btn" title="Modifier">✏️</button>
+                        <button class="action-btn edit-btn" title="Modifier" (click)="editForm(form.id)">✏️</button>
                         <button class="action-btn delete-btn" title="Supprimer">🗑️</button>
                     </div>
                 </td>

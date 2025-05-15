@@ -288,49 +288,49 @@
         </div>
 
         <div class="form-group">
-            <label class="form-group__label" for="originOfDemandSetUuidOriginOfDemands">Origine de la demande </label>
-
-            <div formArrayName="originOfDemandSetUuidOriginOfDemands">
-                <div *ngFor="let option of originOfDemande; let i = index" [formGroupName]="i" class="checkbox-option">
-                    <label>{{ option.originOfDemandLabel }}</label>
-                    <div class="radio-group">
-                        <div class="radio-option">
-                            <label>
-                                <input (change)="checkOtherOriginOfDemand(option.uuidOriginOfDemand, true)"
-                                       type="radio" formControlName="selected" [value]="true"> Oui
-                            </label>
-                        </div>
-                        <div class="radio-option">
-                            <label>
-                                <input (change)="checkOtherOriginOfDemand(option.uuidOriginOfDemand, false)"
-                                       type="radio" formControlName="selected" [value]="false"> Non
-                            </label>
+            <label class="form-group__label">Origine de la demande</label>
+            <div class="checkbox-group">
+                <ng-container *ngFor="let option of originOfDemande">
+                    <div class="checkbox-option">
+                        <label [for]="'originOfDemand-' + option.uuidOriginOfDemand">{{ option.originOfDemandLabel }}</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <label [for]="option.uuidOriginOfDemand + '-yes'">Oui</label>
+                                <input
+                                        type="radio"
+                                        [id]="option.uuidOriginOfDemand + '-yes'"
+                                        [name]="'originOfDemand-' + option.uuidOriginOfDemand"
+                                        (change)="onOriginOfDemandChange($event, option)"
+                                        [value]="true">
+                            </div>
+                            <div class="radio-option">
+                                <label [for]="option.uuidOriginOfDemand + '-no'">Non</label>
+                                <input
+                                        type="radio"
+                                        [id]="option.uuidOriginOfDemand + '-no'"
+                                        [name]="'originOfDemand-' + option.uuidOriginOfDemand"
+                                        (change)="onOriginOfDemandChange($event, option)"
+                                        [value]="false">
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-
-            <div class="invalid-feedback"
-                 *ngIf="structureForm.get('originOfDemandSetUuidOriginOfDemands')?.invalid && structureForm.get('originOfDemandSetUuidOriginOfDemands')?.touched">
-                L'origine de la demande est requis
-            </div>
-            <div *ngIf="showOtherOriginOfDemandInput" class="nested-form">
-                <div class="form-group">
-                    <label class="form-group__label" for="otherOriginOfDemand">Préciser</label>
-                    <input
-                            type="text"
-                            id="otherOriginOfDemand"
-                            formControlName="otherOriginOfDemand"
-                            class="form-control">
-                    <div class="invalid-feedback"
-                         *ngIf="structureForm.get('otherOriginOfDemand')?.invalid && structureForm.get('otherOriginOfDemand')?.touched">
-                        Veuillez préciser l'origine de la demande
+                    <div *ngIf="option.uuidOriginOfDemand === -1 && showOtherOriginOfDemandInput" class="nested-form">
+                        <label class="form-group__label">Préciser autre</label>
+                        <input
+                                type="text"
+                                formControlName="otherOriginOfDemand"
+                                class="form-control"
+                                placeholder="Préciser">
+                        <div class="error-message" *ngIf="structureForm.get('otherOriginOfDemand')?.invalid && structureForm.get('otherOriginOfDemand')?.touched">
+                            Ce champ est obligatoire
+                        </div>
                     </div>
-                </div>
+                </ng-container>
+            </div>
+            <div class="error-message" *ngIf="!hasAnyOriginOfDemandSelected() && structureForm.get('originOfDemandSetUuidOriginOfDemands')?.touched">
+                Veuillez sélectionner au moins une option
             </div>
         </div>
-
         <div class="form-group">
             <label class="form-group__label">Consultation antérieure</label>
             <div class="radio-group">
