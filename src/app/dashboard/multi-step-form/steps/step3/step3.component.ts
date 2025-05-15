@@ -363,7 +363,28 @@ export class Step3Component implements OnInit {
     const answers = [...(this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.value || [])];
     answers[index] = selected;
     this.substanceForm.patchValue({ typesOfSpaConsumptionEntourageAnswers: answers });
-    this.setupSpaTypeValidation(index, selected);
+
+    // Handle dependent fields validation directly here
+    const option = this.typesOfSpaConsumptionEntourages[index];
+    if (option) {
+      if (selected === true) {
+        if (option.uuidTypesOfSpaConsumptionEntourages === 5) {
+          this.substanceForm.get('morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug')?.setValidators([Validators.required]);
+        } else if (option.uuidTypesOfSpaConsumptionEntourages === 8) {
+          this.substanceForm.get('sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic')?.setValidators([Validators.required]);
+        } else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
+          this.substanceForm.get('otherTypesOfSpaConsumptionEntourages')?.setValidators([Validators.required]);
+        }
+      } else {
+        if (option.uuidTypesOfSpaConsumptionEntourages === 5) {
+          this.clearDependentFields(this.substanceForm, ['morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug']);
+        } else if (option.uuidTypesOfSpaConsumptionEntourages === 8) {
+          this.clearDependentFields(this.substanceForm, ['sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic']);
+        } else if (option.uuidTypesOfSpaConsumptionEntourages === -1) {
+          this.clearDependentFields(this.substanceForm, ['otherTypesOfSpaConsumptionEntourages']);
+        }
+      }
+    }
   }
 
   onInitialSpaTypeChange(index: number, value: boolean) {
@@ -430,7 +451,9 @@ export class Step3Component implements OnInit {
     }
 
     if (spaConsumption === true) {
-      this.setupEntourageValidation(true);
+      // Set up validation for entourage options
+      this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.setValidators([Validators.required]);
+      this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.updateValueAndValidity();
 
       const entourageValues = this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.value || [];
 
@@ -463,10 +486,6 @@ export class Step3Component implements OnInit {
                 const input = document.querySelector(selector) as HTMLInputElement;
                 if (input) {
                   input.checked = true;
-                }
-
-                if (answer === true) {
-                  this.setupSpaTypeValidation(index, true);
                 }
               }
             }, 0);
