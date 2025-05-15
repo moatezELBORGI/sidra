@@ -38,11 +38,15 @@ export class Step3Component implements OnInit {
     this.loadData();
     this.setupValidation();
 
-    // Add required validators for main fields
+    // Add required validators for all fields
     const requiredFields = [
       'spaConsumptionInEntourage',
       'spaConsumptionOtherThanAlcoholAndTobacco',
-      'ageOfInitialTypesSedativeHypnoticOtherThanAlcoholAndTobacco'
+      'ageOfInitialTypesSedativeHypnoticOtherThanAlcoholAndTobacco',
+      'spaConsumptionEntourageUuidEntourages',
+      'typesOfSpaConsumptionEntourageAnswers',
+      'typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages',
+      'initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages'
     ];
 
     requiredFields.forEach(field => {
@@ -62,12 +66,20 @@ export class Step3Component implements OnInit {
     // SPA consumption in entourage validation
     this.substanceForm.get('spaConsumptionInEntourage')?.valueChanges.subscribe(value => {
       if (value === true) {
-        // Make entourage options required
-        this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.setValidators([Validators.required]);
-        
-        // Make type of SPA consumption required
-        this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.setValidators([Validators.required]);
-        
+        // Make all dependent fields required
+        const dependentFields = [
+          'spaConsumptionEntourageUuidEntourages',
+          'typesOfSpaConsumptionEntourageAnswers'
+        ];
+
+        dependentFields.forEach(field => {
+          const control = this.substanceForm.get(field);
+          if (control) {
+            control.setValidators([Validators.required]);
+            control.updateValueAndValidity();
+          }
+        });
+
         // Initialize arrays if needed
         if (!this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.value) {
           this.substanceForm.patchValue({
@@ -76,30 +88,43 @@ export class Step3Component implements OnInit {
         }
       } else {
         // Clear validators and values when "No" is selected
-        this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.clearValidators();
-        this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.clearValidators();
-        this.clearDependentFields(this.substanceForm, [
+        const fieldsToReset = [
           'spaConsumptionEntourageUuidEntourages',
           'otherSpaConsumptionInEntourage',
           'typesOfSpaConsumptionEntourageAnswers',
           'morphineDrugOfSpaConsumptionEntouragesIdMorphineDrug',
           'sedativeHypnoticOfSpaConsumptionEntouragesIdSedativeHypnotic',
           'otherTypesOfSpaConsumptionEntourages'
-        ]);
-      }
+        ];
 
-      // Update validity
-      this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.updateValueAndValidity();
-      this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.updateValueAndValidity();
+        fieldsToReset.forEach(field => {
+          const control = this.substanceForm.get(field);
+          if (control) {
+            control.clearValidators();
+            control.reset();
+            control.updateValueAndValidity();
+          }
+        });
+      }
     });
 
     // SPA consumption other than alcohol and tobacco validation
     this.substanceForm.get('spaConsumptionOtherThanAlcoholAndTobacco')?.valueChanges.subscribe(value => {
       if (value === true) {
-        // Make current drug use options required
-        this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setValidators([Validators.required]);
-        
-        // Initialize array if needed
+        // Make all dependent fields required
+        const dependentFields = [
+          'typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages'
+        ];
+
+        dependentFields.forEach(field => {
+          const control = this.substanceForm.get(field);
+          if (control) {
+            control.setValidators([Validators.required]);
+            control.updateValueAndValidity();
+          }
+        });
+
+        // Initialize arrays if needed
         if (!this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value) {
           this.substanceForm.patchValue({
             typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages: new Array(this.filteredTypesOfSpaConsumption.length).fill(null)
@@ -107,47 +132,27 @@ export class Step3Component implements OnInit {
         }
       } else {
         // Clear validators and values when "No" is selected
-        this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.clearValidators();
-        this.clearDependentFields(this.substanceForm, [
+        const fieldsToReset = [
           'typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages',
           'morphineDrugOtherThanAlcoholAndTobaccoIdMorphineDrug',
           'sedativeHypnoticOtherThanAlcoholAndTobaccoIdSedativeHypnotic',
           'otherTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobacco'
-        ]);
-      }
+        ];
 
-      // Update validity
-      this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.updateValueAndValidity();
-    });
-
-    // Validate entourage options
-    this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.valueChanges.subscribe(values => {
-      if (Array.isArray(values)) {
-        // Check if all options have been answered
-        const allAnswered = values.every(value => value.selected !== undefined);
-        if (!allAnswered) {
-          this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.setErrors({ incomplete: true });
-        } else {
-          this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.setErrors(null);
-        }
-
-        // Handle "Other" option validation
-        const hasOther = values.some(v => v.id === -1 && v.selected);
-        const otherControl = this.substanceForm.get('otherSpaConsumptionInEntourage');
-        if (hasOther) {
-          otherControl?.setValidators([Validators.required]);
-        } else {
-          otherControl?.clearValidators();
-          otherControl?.setValue('');
-        }
-        otherControl?.updateValueAndValidity();
+        fieldsToReset.forEach(field => {
+          const control = this.substanceForm.get(field);
+          if (control) {
+            control.clearValidators();
+            control.reset();
+            control.updateValueAndValidity();
+          }
+        });
       }
     });
 
-    // Validate SPA consumption types
+    // Validate that all radio options are answered
     this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.valueChanges.subscribe(answers => {
       if (Array.isArray(answers)) {
-        // Check if all options have been answered
         const allAnswered = answers.every(answer => answer !== null);
         if (!allAnswered) {
           this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.setErrors({ incomplete: true });
@@ -186,8 +191,7 @@ export class Step3Component implements OnInit {
       }
     });
 
-    // Make initial substance type selections required
-    this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setValidators([Validators.required]);
+    // Validate that all initial substance type selections are answered
     this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.valueChanges.subscribe(answers => {
       if (Array.isArray(answers)) {
         const allAnswered = answers.every(answer => answer !== null);
@@ -197,6 +201,7 @@ export class Step3Component implements OnInit {
           this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setErrors(null);
         }
 
+        // Handle dependent fields validation
         answers.forEach((answer, index) => {
           const option = this.filteredTypesOfSpaConsumption[index];
           if (option) {
@@ -547,3 +552,5 @@ export class Step3Component implements OnInit {
     return Array.isArray(values) && values.some(value => value.selected !== null);
   }
 }
+
+export { Step3Component }
