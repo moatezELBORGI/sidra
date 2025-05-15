@@ -48,6 +48,144 @@ export class Step4Component implements OnInit {
     return this.parentForm.get('behaviorsAndTests') as FormGroup;
   }
 
+  private setupValidation() {
+    // Set required validators for test fields
+    const testFields = ['vihTest', 'vhcTest', 'vhbTest'];
+    testFields.forEach(field => {
+      const control = this.behaviorsForm.get(field);
+      if (control) {
+        control.setValidators([Validators.required]);
+        control.updateValueAndValidity();
+      }
+    });
+
+    // VIH test date validation
+    this.behaviorsForm.get('vihTest')?.valueChanges.subscribe(value => {
+      const dateControl = this.behaviorsForm.get('dateVihTest');
+      if (value === true) {
+        dateControl?.setValidators([Validators.required]);
+      } else {
+        dateControl?.clearValidators();
+        dateControl?.setValue(null);
+      }
+      dateControl?.updateValueAndValidity();
+    });
+
+    // VHC test date validation
+    this.behaviorsForm.get('vhcTest')?.valueChanges.subscribe(value => {
+      const dateControl = this.behaviorsForm.get('dateVhcTest');
+      if (value === true) {
+        dateControl?.setValidators([Validators.required]);
+      } else {
+        dateControl?.clearValidators();
+        dateControl?.setValue(null);
+      }
+      dateControl?.updateValueAndValidity();
+    });
+
+    // VHB test date validation
+    this.behaviorsForm.get('vhbTest')?.valueChanges.subscribe(value => {
+      const dateControl = this.behaviorsForm.get('dateVhbTest');
+      if (value === true) {
+        dateControl?.setValidators([Validators.required]);
+      } else {
+        dateControl?.clearValidators();
+        dateControl?.setValue(null);
+      }
+      dateControl?.updateValueAndValidity();
+    });
+
+    // Route administration validation
+    this.behaviorsForm.get('usualRouteOfAdministrationOfPrincipalSubstanceUuidUsualRouteOfAdministration')?.valueChanges.subscribe(answers => {
+      if (Array.isArray(answers)) {
+        const hasOther = answers.some((answer, index) =>
+            this.usualRouteOptions[index]?.uuidUsualRouteOfAdministration === -1 && answer === true
+        );
+
+        const otherControl = this.behaviorsForm.get('otherUsualRouteOfAdministrationOfPrincipalSubstance');
+        if (hasOther) {
+          otherControl?.setValidators([Validators.required]);
+        } else {
+          otherControl?.clearValidators();
+          otherControl?.setValue('');
+        }
+        otherControl?.updateValueAndValidity();
+
+        // Validate that all options are answered
+        if (!this.areAllRouteOptionsAnswered()) {
+          this.behaviorsForm.get('usualRouteOfAdministrationOfPrincipalSubstanceUuidUsualRouteOfAdministration')?.setErrors({ incomplete: true });
+        }
+      }
+    });
+
+    // Age validation
+    const ageControl = this.behaviorsForm.get('ageOfConsumptionOfPrincipalSubstance');
+    if (ageControl) {
+      ageControl.setValidators([Validators.required, Validators.min(1)]);
+      ageControl.updateValueAndValidity();
+    }
+
+    // Frequency validation
+    const frequencyControl = this.behaviorsForm.get('usualRouteOfAdministrationFrequencyOfPrincipalSubstanceUuidConsumptionFrequency');
+    if (frequencyControl) {
+      frequencyControl.setValidators([Validators.required]);
+      frequencyControl.updateValueAndValidity();
+    }
+
+    // Syringe sharing validation
+    const syringeSharingControl = this.behaviorsForm.get('notionOfSyringeSharingUuidNotionOfSyringeSharing');
+    if (syringeSharingControl) {
+      syringeSharingControl.setValidators([Validators.required]);
+      syringeSharingControl.updateValueAndValidity();
+    }
+
+    // Add validation for weaning support fields
+    this.behaviorsForm.get('supportForWeaning')?.setValidators([Validators.required]);
+    this.behaviorsForm.get('supportForWeaning')?.updateValueAndValidity();
+
+    // Add conditional validation for why not support
+    this.behaviorsForm.get('supportForWeaning')?.valueChanges.subscribe(value => {
+      const whyNotControl = this.behaviorsForm.get('whyNotSupportForWeaning');
+      if (value === false) {
+        whyNotControl?.setValidators([Validators.required]);
+      } else {
+        whyNotControl?.clearValidators();
+        whyNotControl?.setValue('');
+      }
+      whyNotControl?.updateValueAndValidity();
+    });
+
+    // Add validation for tried to quit fields
+    this.behaviorsForm.get('triedToQuit')?.setValidators([Validators.required]);
+    this.behaviorsForm.get('triedToQuit')?.updateValueAndValidity();
+
+    // Add conditional validation for quit attempt details
+    this.behaviorsForm.get('triedToQuit')?.valueChanges.subscribe(value => {
+      const withWhoControl = this.behaviorsForm.get('withWhoTriedToQuitUuidTriedToQuit');
+      if (value === true) {
+        withWhoControl?.setValidators([Validators.required]);
+      } else {
+        withWhoControl?.clearValidators();
+        withWhoControl?.setValue(null);
+        // Clear health structure field when tried to quit is false
+        this.behaviorsForm.get('healthStructureTriedToQuit')?.setValue('');
+      }
+      withWhoControl?.updateValueAndValidity();
+    });
+
+    // Add conditional validation for health structure
+    this.behaviorsForm.get('withWhoTriedToQuitUuidTriedToQuit')?.valueChanges.subscribe(values => {
+      const healthStructureControl = this.behaviorsForm.get('healthStructureTriedToQuit');
+      if (Array.isArray(values) && values.includes(5)) { // Assuming 5 is the ID for health structure option
+        healthStructureControl?.setValidators([Validators.required]);
+      } else {
+        healthStructureControl?.clearValidators();
+        healthStructureControl?.setValue('');
+      }
+      healthStructureControl?.updateValueAndValidity();
+    });
+  }
+
   private getTriedToQuitList() {
     this.isLoading = true;
     this.drugRequestService.getTriedToQuitDto().subscribe({
@@ -187,132 +325,6 @@ export class Step4Component implements OnInit {
     }
   }
 
-  private setupValidation() {
-    // Route administration validation
-    this.behaviorsForm.get('usualRouteOfAdministrationOfPrincipalSubstanceUuidUsualRouteOfAdministration')?.valueChanges.subscribe(answers => {
-      if (Array.isArray(answers)) {
-        const hasOther = answers.some((answer, index) =>
-            this.usualRouteOptions[index]?.uuidUsualRouteOfAdministration === -1 && answer === true
-        );
-
-        const otherControl = this.behaviorsForm.get('otherUsualRouteOfAdministrationOfPrincipalSubstance');
-        if (hasOther) {
-          otherControl?.setValidators([Validators.required]);
-        } else {
-          otherControl?.clearValidators();
-          otherControl?.setValue('');
-        }
-        otherControl?.updateValueAndValidity();
-
-        // Validate that all options are answered
-        if (!this.areAllRouteOptionsAnswered()) {
-          this.behaviorsForm.get('usualRouteOfAdministrationOfPrincipalSubstanceUuidUsualRouteOfAdministration')?.setErrors({ incomplete: true });
-        }
-      }
-    });
-
-    // Age validation
-    const ageControl = this.behaviorsForm.get('ageOfConsumptionOfPrincipalSubstance');
-    if (ageControl) {
-      ageControl.setValidators([Validators.required, Validators.min(1)]);
-      ageControl.updateValueAndValidity();
-    }
-
-    // Frequency validation
-    const frequencyControl = this.behaviorsForm.get('usualRouteOfAdministrationFrequencyOfPrincipalSubstanceUuidConsumptionFrequency');
-    if (frequencyControl) {
-      frequencyControl.setValidators([Validators.required]);
-      frequencyControl.updateValueAndValidity();
-    }
-
-    // Syringe sharing validation
-    const syringeSharingControl = this.behaviorsForm.get('notionOfSyringeSharingUuidNotionOfSyringeSharing');
-    if (syringeSharingControl) {
-      syringeSharingControl.setValidators([Validators.required]);
-      syringeSharingControl.updateValueAndValidity();
-    }
-
-    // Add validation for test fields
-    this.behaviorsForm.get('vihTest')?.valueChanges.subscribe(value => {
-      const dateControl = this.behaviorsForm.get('dateVihTest');
-      if (value === true) {
-        dateControl?.setValidators([Validators.required]);
-      } else {
-        dateControl?.clearValidators();
-        dateControl?.setValue(null);
-      }
-      dateControl?.updateValueAndValidity();
-    });
-
-    this.behaviorsForm.get('vhcTest')?.valueChanges.subscribe(value => {
-      const dateControl = this.behaviorsForm.get('dateVhcTest');
-      if (value === true) {
-        dateControl?.setValidators([Validators.required]);
-      } else {
-        dateControl?.clearValidators();
-        dateControl?.setValue(null);
-      }
-      dateControl?.updateValueAndValidity();
-    });
-
-    this.behaviorsForm.get('vhbTest')?.valueChanges.subscribe(value => {
-      const dateControl = this.behaviorsForm.get('dateVhbTest');
-      if (value === true) {
-        dateControl?.setValidators([Validators.required]);
-      } else {
-        dateControl?.clearValidators();
-        dateControl?.setValue(null);
-      }
-      dateControl?.updateValueAndValidity();
-    });
-
-    // Add validation for weaning support fields
-    this.behaviorsForm.get('supportForWeaning')?.setValidators([Validators.required]);
-    this.behaviorsForm.get('supportForWeaning')?.updateValueAndValidity();
-
-    // Add conditional validation for why not support
-    this.behaviorsForm.get('supportForWeaning')?.valueChanges.subscribe(value => {
-      const whyNotControl = this.behaviorsForm.get('whyNotSupportForWeaning');
-      if (value === false) {
-        whyNotControl?.setValidators([Validators.required]);
-      } else {
-        whyNotControl?.clearValidators();
-        whyNotControl?.setValue('');
-      }
-      whyNotControl?.updateValueAndValidity();
-    });
-
-    // Add validation for tried to quit fields
-    this.behaviorsForm.get('triedToQuit')?.setValidators([Validators.required]);
-    this.behaviorsForm.get('triedToQuit')?.updateValueAndValidity();
-
-    // Add conditional validation for quit attempt details
-    this.behaviorsForm.get('triedToQuit')?.valueChanges.subscribe(value => {
-      const withWhoControl = this.behaviorsForm.get('withWhoTriedToQuitUuidTriedToQuit');
-      if (value === true) {
-        withWhoControl?.setValidators([Validators.required]);
-      } else {
-        withWhoControl?.clearValidators();
-        withWhoControl?.setValue(null);
-        // Clear health structure field when tried to quit is false
-        this.behaviorsForm.get('healthStructureTriedToQuit')?.setValue('');
-      }
-      withWhoControl?.updateValueAndValidity();
-    });
-
-    // Add conditional validation for health structure
-    this.behaviorsForm.get('withWhoTriedToQuitUuidTriedToQuit')?.valueChanges.subscribe(values => {
-      const healthStructureControl = this.behaviorsForm.get('healthStructureTriedToQuit');
-      if (Array.isArray(values) && values.includes(5)) { // Assuming 5 is the ID for health structure option
-        healthStructureControl?.setValidators([Validators.required]);
-      } else {
-        healthStructureControl?.clearValidators();
-        healthStructureControl?.setValue('');
-      }
-      healthStructureControl?.updateValueAndValidity();
-    });
-  }
-
   public areAllRouteOptionsAnswered(): boolean {
     const answers = this.behaviorsForm.get('usualRouteOfAdministrationOfPrincipalSubstanceUuidUsualRouteOfAdministration')?.value;
     return answers?.every((answer: boolean | null) => answer !== null) ?? false;
@@ -340,3 +352,5 @@ export class Step4Component implements OnInit {
     }
   }
 }
+
+export { Step4Component }
