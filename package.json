@@ -7,7 +7,6 @@
     "build": "ng build",
     "dev": "ng serve",
     "json-server": "json-server --watch db.json"
-
   },
   "dependencies": {
     "@angular/animations": "^19.2.0",
@@ -26,6 +25,7 @@
     "@angular/build": "^19.2.0",
     "@angular/cli": "^19.2.0",
     "@angular/compiler-cli": "^19.2.0",
+    "json-server": "^0.17.4",
     "typescript": "^5.8.2"
   }
 }
