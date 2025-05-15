@@ -9,26 +9,44 @@
     <div class="form-content">
         <div class="step-content" *ngIf="currentStep === 1" @stepAnimation>
             <app-step1 [parentForm]="form"></app-step1>
+            <div *ngIf="showValidationError" class="validation-error">
+                Veuillez remplir tous les champs obligatoires avant de continuer.
+            </div>
         </div>
 
         <div class="step-content" *ngIf="currentStep === 2" @stepAnimation>
             <app-step2 [parentForm]="form"></app-step2>
+            <div *ngIf="showValidationError" class="validation-error">
+                Veuillez remplir tous les champs obligatoires avant de continuer.
+            </div>
         </div>
 
         <div class="step-content" *ngIf="currentStep === 3" @stepAnimation>
             <app-step3 [parentForm]="form"></app-step3>
+            <div *ngIf="showValidationError" class="validation-error">
+                Veuillez remplir tous les champs obligatoires avant de continuer.
+            </div>
         </div>
 
         <div class="step-content" *ngIf="currentStep === 4" @stepAnimation>
             <app-step4 [parentForm]="form"></app-step4>
+            <div *ngIf="showValidationError" class="validation-error">
+                Veuillez remplir tous les champs obligatoires avant de continuer.
+            </div>
         </div>
 
         <div class="step-content" *ngIf="currentStep === 5" @stepAnimation>
             <app-step5 [parentForm]="form"></app-step5>
+            <div *ngIf="showValidationError" class="validation-error">
+                Veuillez remplir tous les champs obligatoires avant de continuer.
+            </div>
         </div>
 
         <div class="step-content" *ngIf="currentStep === 6" @stepAnimation>
             <app-step6 [parentForm]="form"></app-step6>
+            <div *ngIf="showValidationError" class="validation-error">
+                Veuillez remplir tous les champs obligatoires avant de continuer.
+            </div>
         </div>
 
         <div class="form-controls">

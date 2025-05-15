@@ -39,7 +39,8 @@ import { Router, ActivatedRoute } from '@angular/router';
         animate('300ms ease-in', style({transform: 'translateX(-100%)', opacity: 0}))
       ])
     ])
-  ]
+  ],
+  standalone: true
 })
 export class MultiStepFormComponent implements OnInit {
   steps = [
@@ -57,6 +58,7 @@ export class MultiStepFormComponent implements OnInit {
   form!: FormGroup;
   isEditMode = false;
   formId: string | null = null;
+  showValidationError = false;
 
   stepFormsValid: Record<number, boolean> = {
     1: false,
@@ -101,7 +103,6 @@ export class MultiStepFormComponent implements OnInit {
   private loadFormData(id: string) {
     this.formDataService.getFormById(id).subscribe({
       next: (formData) => {
-        // Patch each form group with its corresponding data
         Object.entries(this.formGroups).forEach(([_, groupName]) => {
           const groupData = formData[groupName as keyof typeof formData];
           if (groupData) {
@@ -123,6 +124,7 @@ export class MultiStepFormComponent implements OnInit {
           const stepNumber = parseInt(step);
           this.stepFormsValid[stepNumber] = group.valid;
           this.steps[stepNumber - 1].valid = group.valid;
+          this.showValidationError = false;
         });
       }
     });
@@ -133,12 +135,15 @@ export class MultiStepFormComponent implements OnInit {
     if (step < this.currentStep) {
       this.currentStep = step;
       this.updateProgress();
+      this.showValidationError = false;
     } else {
       this.validationService.markFormGroupTouched(currentForm);
       if (currentForm.valid) {
         this.currentStep = step;
         this.updateProgress();
+        this.showValidationError = false;
       } else {
+        this.showValidationError = true;
         this.validationService.scrollToFirstInvalidControl('multi-step-form');
       }
     }
@@ -152,8 +157,10 @@ export class MultiStepFormComponent implements OnInit {
       if (this.currentStep < this.totalSteps) {
         this.currentStep++;
         this.updateProgress();
+        this.showValidationError = false;
       }
     } else {
+      this.showValidationError = true;
       this.validationService.scrollToFirstInvalidControl('multi-step-form');
     }
   }
@@ -162,6 +169,7 @@ export class MultiStepFormComponent implements OnInit {
     if (this.currentStep > 1) {
       this.currentStep--;
       this.updateProgress();
+      this.showValidationError = false;
     }
   }
 
@@ -206,6 +214,7 @@ export class MultiStepFormComponent implements OnInit {
         });
       }
     } else {
+      this.showValidationError = true;
       this.validationService.scrollToFirstInvalidControl('multi-step-form');
     }
   }
