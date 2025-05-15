@@ -69,16 +69,32 @@ export class Step3Component implements OnInit {
           });
         }
         
-        // Set validators for entourage options
+        // Set validators for entourage options and SPA consumption types
+        this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.setValidators([
+          Validators.required,
+          (control) => {
+            const values = control.value;
+            if (!Array.isArray(values)) return { invalidFormat: true };
+            // Check if all entourage options have been answered
+            const allAnswered = values.every(v => v.selected === true || v.selected === false);
+            return allAnswered ? null : { incomplete: true };
+          }
+        ]);
+
         this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.setValidators([
           Validators.required,
           (control) => {
-            const value = control.value;
-            if (!Array.isArray(value)) return { invalidFormat: true };
-            if (value.some(v => v === null)) return { incomplete: true };
-            return null;
+            const values = control.value;
+            if (!Array.isArray(values)) return { invalidFormat: true };
+            // Check if all SPA consumption types have been answered
+            const allAnswered = values.every(v => v === true || v === false);
+            return allAnswered ? null : { incomplete: true };
           }
         ]);
+
+        // Update validity
+        this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.updateValueAndValidity();
+        this.substanceForm.get('typesOfSpaConsumptionEntourageAnswers')?.updateValueAndValidity();
       } else {
         // Clear validators and values when "No" is selected
         const fieldsToReset = [
@@ -116,12 +132,15 @@ export class Step3Component implements OnInit {
         this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setValidators([
           Validators.required,
           (control) => {
-            const value = control.value;
-            if (!Array.isArray(value)) return { invalidFormat: true };
-            if (value.some(v => v === null)) return { incomplete: true };
-            return null;
+            const values = control.value;
+            if (!Array.isArray(values)) return { invalidFormat: true };
+            // Check if all options have been answered
+            const allAnswered = values.every(v => v === true || v === false);
+            return allAnswered ? null : { incomplete: true };
           }
         ]);
+
+        this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.updateValueAndValidity();
       } else {
         // Clear validators and values when "No" is selected
         const fieldsToReset = [
@@ -146,10 +165,11 @@ export class Step3Component implements OnInit {
     this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setValidators([
       Validators.required,
       (control) => {
-        const value = control.value;
-        if (!Array.isArray(value)) return { invalidFormat: true };
-        if (value.some(v => v === null)) return { incomplete: true };
-        return null;
+        const values = control.value;
+        if (!Array.isArray(values)) return { invalidFormat: true };
+        // Check if all initial substance types have been answered
+        const allAnswered = values.every(v => v === true || v === false);
+        return allAnswered ? null : { incomplete: true };
       }
     ]);
 
@@ -489,5 +509,7 @@ export class Step3Component implements OnInit {
     return Array.isArray(values) && values.some(value => value.selected !== null);
   }
 }
+
+export { Step3Component }
 
 export { Step3Component }
