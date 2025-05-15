@@ -13,7 +13,7 @@ import { Step6Component } from "./steps/step6/step6.component";
 import { NgIf } from "@angular/common";
 import { FormDataService } from '../../core/services/FormDataService.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LoadingPopupComponent } from '../../shared/loading-popup/loading-popup.component';
+import {LoadingpopupComponent} from "../../shared/loadingpopup/loadingpopup.component";
 
 @Component({
   selector: 'app-multi-step-form',
@@ -28,7 +28,7 @@ import { LoadingPopupComponent } from '../../shared/loading-popup/loading-popup.
     Step5Component,
     Step6Component,
     NgIf,
-    LoadingPopupComponent
+    LoadingpopupComponent
   ],
   animations: [
     trigger('stepAnimation', [

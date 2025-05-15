@@ -150,8 +150,13 @@ export class Step1Component implements OnInit {
     if (selectElement) {
       const value = selectElement.value;
       this.ShowOtherReasonForWithdrawalInputInput = value === '-1';
+
+      const otherReasonForWithdrawal = this.structureForm.get('otherReasonForWithdrawal');
+
+      otherReasonForWithdrawal?.setValidators([Validators.required]);
       if (value !== '-1') {
         this.clearDependentFields(this.structureForm, ['otherReasonForWithdrawal']);
+        otherReasonForWithdrawal?.clearValidators();
       }
     }
   }
@@ -161,8 +166,13 @@ export class Step1Component implements OnInit {
     if (selectElement) {
       const value = selectElement.value;
       this.ShowOtherReasonForRecidivismUuidReasonForRecidivismInput = value === '-1';
+      const otherReasonForRecidivism = this.structureForm.get('otherReasonForRecidivism');
+
+      otherReasonForRecidivism?.setValidators([Validators.required]);
+
       if (value !== '-1') {
         this.clearDependentFields(this.structureForm, ['otherReasonForRecidivism']);
+        otherReasonForRecidivism?.clearValidators();
       }
     }
   }
@@ -196,9 +206,19 @@ export class Step1Component implements OnInit {
 
       if (selectedValue === '5') {
         this.showRecidivismMotiveInput = true;
+
+
+        const reasonForRecidivismUuidReasonForRecidivism = this.structureForm.get('reasonForRecidivismUuidReasonForRecidivism');
+
+        reasonForRecidivismUuidReasonForRecidivism?.setValidators([Validators.required]);
         this.getReasonForRecidivismDto();
       } else if (selectedValue === '3') {
         this.showReasonForWithdrawalInput = true;
+        const reasonForWithdrawalUuidReasonForWithdrawal = this.structureForm.get('reasonForWithdrawalUuidReasonForWithdrawal');
+
+        reasonForWithdrawalUuidReasonForWithdrawal?.setValidators([Validators.required]);
+
+
         this.getReasonForWithdrawalDto();
       } else if (selectedValue === '-1') {
         this.showOtherConsultancyMotifInput = true;

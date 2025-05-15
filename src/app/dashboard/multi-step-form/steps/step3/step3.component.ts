@@ -27,8 +27,8 @@ export class Step3Component implements OnInit {
   filteredTypesOfSpaConsumption: TypesOfSpaConsumptionEntourages[] = [];
 
   constructor(
-    private drugRequestService: DrugRequestService,
-    private fb: FormBuilder
+      private drugRequestService: DrugRequestService,
+      private fb: FormBuilder
   ) {
     this.substanceForm = new FormGroup({});
   }
@@ -68,7 +68,7 @@ export class Step3Component implements OnInit {
             typesOfSpaConsumptionEntourageAnswers: new Array(this.typesOfSpaConsumptionEntourages.length).fill(null)
           });
         }
-        
+
         // Set validators for entourage options and SPA consumption types
         this.substanceForm.get('spaConsumptionEntourageUuidEntourages')?.setValidators([
           Validators.required,
@@ -123,11 +123,11 @@ export class Step3Component implements OnInit {
         // Initialize arrays with null values to force validation
         if (!this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value) {
           this.substanceForm.patchValue({
-            typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages: 
-              new Array(this.filteredTypesOfSpaConsumption.length).fill(null)
+            typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages:
+                new Array(this.filteredTypesOfSpaConsumption.length).fill(null)
           });
         }
-        
+
         // Set validators for other SPA options
         this.substanceForm.get('typesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.setValidators([
           Validators.required,
@@ -177,7 +177,7 @@ export class Step3Component implements OnInit {
     if (!this.substanceForm.get('initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages')?.value) {
       this.substanceForm.patchValue({
         initialTypesOfSpaConsumptionEntouragesOtherThanAlcoholAndTobaccoUuidTypesOfSpaConsumptionEntourages:
-          new Array(this.filteredTypesOfSpaConsumption.length).fill(null)
+            new Array(this.filteredTypesOfSpaConsumption.length).fill(null)
       });
     }
 
@@ -510,4 +510,4 @@ export class Step3Component implements OnInit {
   }
 }
 
-export { Step3Component }
+

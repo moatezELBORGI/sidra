@@ -209,6 +209,9 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
+    .toggle-btn{
+        display: none;
+    }
     .mobile-toggle-btn {
         display: flex;
     }

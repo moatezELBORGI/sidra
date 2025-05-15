@@ -55,7 +55,20 @@
     cursor: pointer;
     transition: all 0.2s ease;
 }
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
 
+.form-control:focus {
+    border-color: #3B82F6;
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
 .filter-btn.active {
     background-color: var(--primary);
     color: white;
