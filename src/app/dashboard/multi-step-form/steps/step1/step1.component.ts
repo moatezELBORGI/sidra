@@ -58,6 +58,7 @@ export class Step1Component implements OnInit {
   showOtherAccommodationTypeInput = false;
   showPracticeSportInput = false;
   showCompetitionSportWayInput = false;
+  showOtherConsultancyFrameInput = false; // Added missing property
 
   constructor(
     private drugRequestService: DrugRequestService,
@@ -179,6 +180,7 @@ export class Step1Component implements OnInit {
     const checkbox = event.target as HTMLInputElement;
     if (checkbox.checked) {
       this.structureForm.patchValue({ consultancyFrame: value });
+      this.showOtherConsultancyFrameInput = value === -1; // Updated to set the correct flag
       this.showOtherConsultancyMotifInput = value === -1;
     }
   }
