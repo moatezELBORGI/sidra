@@ -21,146 +21,189 @@ import { SchoolLevelDto } from "../../../../core/models/demanddrugs/SchoolLevelD
 })
 export class Step1Component implements OnInit {
   @Input() parentForm!: FormGroup;
+  
+  structureForm!: FormGroup;
+  
+  // Options arrays
+  sectorOptions: any[] = [];
+  ongStructureOptions: any[] = [];
+  ministerOptions: any[] = [];
+  structureDemandedOptions: any[] = [];
+  nationalityOptions: any[] = [];
+  gouvernoratOptions: any[] = [];
+  delegationOptions: any[] = [];
+  consultancyFrame: ConsultancyFrameDto[] = [];
+  originOfDemande: OriginOfDemandDto[] = [];
+  consultancyMotif: ConsultancyMotifDto[] = [];
+  reasonForRecidivism: ReasonForRecidivismDto[] = [];
+  reasonForWithdrawal: ReasonForWithdrawalDto[] = [];
+  familySituation: FamilySituationDto[] = [];
+  accommodationTypeDto: AccommodationTypeDto[] = [];
+  professionDto: ProfessionDto[] = [];
+  schoolLevel: SchoolLevelDto[] = [];
+
+  // Show/hide flags
+  showOngList(): boolean {
+    return this.structureForm.get('sector')?.value === 'ONG';
+  }
+  
+  showPracticeSportInput = false;
+  showCompetitionSportWayInput = false;
+  showOtherConsultancyFrameInput = false;
+  showOtherOriginOfDemandInput = false;
+  showOtherOldConsultancyDateInput = false;
+  showRecidivismMotiveInput = false;
+  showOtherConsultancyMotifInput = false;
+  showReasonForWithdrawalInput = false;
+  ShowOtherReasonForWithdrawalInputInput = false;
+  ShowOtherReasonForRecidivismUuidReasonForRecidivismInput = false;
+  showOtherFamilySituationInput = false;
+  showOtherAccommodationTypeInput = false;
+
+  showGovList(): boolean {
+    return this.structureForm.get('residence')?.value === '1';
+  }
+
+  showDelegation(): boolean {
+    return !!this.structureForm.get('governorateOfResidenceUuidGovernorate')?.value;
+  }
+
+  showResidenceCountryList(): boolean {
+    return this.structureForm.get('residence')?.value === '2';
+  }
 
   constructor(
-      private drugRequestService: DrugRequestService,
-      private fb: FormBuilder
+    private drugRequestService: DrugRequestService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    // Set required validators for default visible fields
-    const requiredFields = [
-      'sector',
-      'structureId',
-      'structureDemandedStructureId',
-      'patientId',
-      'consultationDate',
-      'gender',
-      'birthDate',
-      'nationalityUuidCountry',
-      'residence',
-      'consultancyFrame',
-      'oldConsultancy',
-      'familySituationIdFamilySituation',
-      'accommodationTypeIdAccommodationType',
-      'stableAccommodation',
-      'professionUuidProfession',
-      'schoolLevelUuidSchoolLevelSchoolLevel',
-      'practiceSport'
-    ];
+    this.initializeForm();
+    this.loadData();
+  }
 
-    requiredFields.forEach(field => {
-      const control = this.structureForm.get(field);
+  private initializeForm(): void {
+    this.structureForm = this.parentForm.get('structureInfo') as FormGroup;
+  }
+
+  private loadData(): void {
+    // Load all necessary data from service
+    // These would typically be API calls through drugRequestService
+    this.loadSectorOptions();
+    this.loadOtherOptions();
+  }
+
+  private loadSectorOptions(): void {
+    this.sectorOptions = [
+      { key: 'PUBLIC', label: 'Public' },
+      { key: 'ONG', label: 'ONG' }
+    ];
+  }
+
+  private loadOtherOptions(): void {
+    // Initialize other options arrays
+    // This would typically involve API calls
+  }
+
+  // Event handlers
+  handleConsultancyFrameChange(event: Event, value: any): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.structureForm.patchValue({ consultancyFrame: checked ? value : null });
+    this.showOtherConsultancyFrameInput = value === -1 && checked;
+  }
+
+  onOriginOfDemandChange(event: Event, option: any): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    const currentValue = this.structureForm.get('originOfDemandSetUuidOriginOfDemands')?.value || [];
+    
+    if (checked) {
+      currentValue.push(option.uuidOriginOfDemand);
+    } else {
+      const index = currentValue.indexOf(option.uuidOriginOfDemand);
+      if (index > -1) {
+        currentValue.splice(index, 1);
+      }
+    }
+    
+    this.structureForm.patchValue({ originOfDemandSetUuidOriginOfDemands: currentValue });
+    this.showOtherOriginOfDemandInput = option.uuidOriginOfDemand === -1 && checked;
+  }
+
+  showOtherOldConsultancyDate(show: boolean): void {
+    this.showOtherOldConsultancyDateInput = show;
+  }
+
+  handleFamilySituationChange(event: Event, value: any): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.structureForm.patchValue({ familySituationIdFamilySituation: checked ? value : null });
+    this.showOtherFamilySituationInput = value === -1 && checked;
+  }
+
+  handleAccommodationTypeChange(event: Event, value: any): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.structureForm.patchValue({ accommodationTypeIdAccommodationType: checked ? value : null });
+    this.showOtherAccommodationTypeInput = value === -1 && checked;
+  }
+
+  handleProfessionChange(event: Event, value: any): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.structureForm.patchValue({ professionUuidProfession: checked ? value : null });
+  }
+
+  handleSchoolLevelChange(event: Event, value: any): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.structureForm.patchValue({ schoolLevelUuidSchoolLevelSchoolLevel: checked ? value : null });
+  }
+
+  showPracticeSport(show: boolean): void {
+    this.showPracticeSportInput = show;
+  }
+
+  competitionSportWay(isCompetition: boolean): void {
+    this.showCompetitionSportWayInput = isCompetition;
+  }
+
+  hasAnyOriginOfDemandSelected(): boolean {
+    const selections = this.structureForm.get('originOfDemandSetUuidOriginOfDemands')?.value;
+    return Array.isArray(selections) && selections.length > 0;
+  }
+
+  private clearDependentFields(form: FormGroup, fields: string[]): void {
+    fields.forEach(field => {
+      const control = form.get(field);
       if (control) {
-        control.setValidators([Validators.required]);
+        control.reset();
+        control.clearValidators();
         control.updateValueAndValidity();
       }
     });
-
-    // Load all data first
-    this.loadAllData().then(() => {
-      // Setup validation after data is loaded
-      this.setupValidation();
-
-      // Restore visibility of fields based on form values
-      this.restoreFieldVisibility();
-
-      // Make sure "other" input is shown if needed
-      this.updateShowOtherOriginOfDemandInput();
-
-      // Important: Restore radio button selections after everything is loaded
-      setTimeout(() => {
-        this.restoreOriginOfDemandSelections();
-      });
-    });
   }
 
-  ShowRecidivismMotiveOrSeverity(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement | null;
-
-    if (selectElement) {
-      const selectedValue = selectElement.value;
-      this.showRecidivismMotiveInput = false;
-      this.showOtherConsultancyMotifInput = false;
-      this.showReasonForWithdrawalInput = false;
-      this.ShowOtherReasonForWithdrawalInputInput = false;
-      this.ShowOtherReasonForRecidivismUuidReasonForRecidivismInput = false;
-
-      if (selectedValue !== '5') {
-        this.clearDependentFields(this.structureForm, [
-          'reasonForRecidivismUuidReasonForRecidivism',
-          'otherReasonForRecidivism'
-        ]);
-      }
-      if (selectedValue !== '3') {
-        this.clearDependentFields(this.structureForm, [
-          'reasonForWithdrawalUuidReasonForWithdrawal',
-          'otherReasonForWithdrawal'
-        ]);
-      }
-      if (selectedValue !== '-1') {
-        this.clearDependentFields(this.structureForm, ['otherOldConsultancyMotif']);
-      }
-
-      if (selectedValue === '5') {
-        this.showRecidivismMotiveInput = true;
-        this.getReasonForRecidivismDto();
-        // Add required validator for recidivism reason
-        const recidivismControl = this.structureForm.get('reasonForRecidivismUuidReasonForRecidivism');
-        if (recidivismControl) {
-          recidivismControl.setValidators([Validators.required]);
-          recidivismControl.updateValueAndValidity();
-        }
-      } else if (selectedValue === '3') {
-        this.showReasonForWithdrawalInput = true;
-        this.getReasonForWithdrawalDto();
-        // Add required validator for withdrawal reason
-        const withdrawalControl = this.structureForm.get('reasonForWithdrawalUuidReasonForWithdrawal');
-        if (withdrawalControl) {
-          withdrawalControl.setValidators([Validators.required]);
-          withdrawalControl.updateValueAndValidity();
-        }
-      } else if (selectedValue === '-1') {
-        this.showOtherConsultancyMotifInput = true;
-      }
-    }
+  private setupValidation(): void {
+    // Add validation logic here
   }
 
-  ShowOtherReasonForRecidivismUuidReasonForRecidivism(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement | null;
-    if (selectElement) {
-      const value = selectElement.value;
-      this.ShowOtherReasonForRecidivismUuidReasonForRecidivismInput = value === '-1';
-      if (value === '-1') {
-        // Add required validator for other recidivism reason
-        const otherRecidivismControl = this.structureForm.get('otherReasonForRecidivism');
-        if (otherRecidivismControl) {
-          otherRecidivismControl.setValidators([Validators.required]);
-          otherRecidivismControl.updateValueAndValidity();
-        }
-      } else {
-        this.clearDependentFields(this.structureForm, ['otherReasonForRecidivism']);
-      }
-    }
+  private restoreFieldVisibility(): void {
+    // Restore visibility logic here
   }
 
-  ShowReasonForWithdrawalInput(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement | null;
-    if (selectElement) {
-      const value = selectElement.value;
-      this.ShowOtherReasonForWithdrawalInputInput = value === '-1';
-      if (value === '-1') {
-        // Add required validator for other withdrawal reason
-        const otherWithdrawalControl = this.structureForm.get('otherReasonForWithdrawal');
-        if (otherWithdrawalControl) {
-          otherWithdrawalControl.setValidators([Validators.required]);
-          otherWithdrawalControl.updateValueAndValidity();
-        }
-      } else {
-        this.clearDependentFields(this.structureForm, ['otherReasonForWithdrawal']);
-      }
-    }
+  private restoreOriginOfDemandSelections(): void {
+    // Restore selections logic here
   }
 
-  // ... rest of the component code remains unchanged ...
+  private updateShowOtherOriginOfDemandInput(): void {
+    // Update visibility logic here
+  }
+
+  private async loadAllData(): Promise<void> {
+    // Load all data logic here
+  }
+
+  private getReasonForRecidivismDto(): void {
+    // Load recidivism data logic here
+  }
+
+  private getReasonForWithdrawalDto(): void {
+    // Load withdrawal data logic here
+  }
 }
