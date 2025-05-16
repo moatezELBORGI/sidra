@@ -1,8 +1,56 @@
 <div class="drug-supply-container">
   <h1>Gestion de l'offre de drogues</h1>
 
-  <form [formGroup]="seizureForm" class="form-section">
-    <h2>1. Quantité de drogues saisies selon la substance</h2>
+  <!-- Table Section -->
+  <div class="table-section card">
+    <div class="table-header">
+      <h2>Données saisies</h2>
+      <button class="btn-primary" (click)="showForm = !showForm">
+        {{ showForm ? 'Annuler' : 'Nouvelle saisie' }}
+      </button>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Cannabis (kg)</th>
+            <th>Comprimés Tableau A</th>
+            <th>Ecstasy (comprimé)</th>
+            <th>Ecstasy (poudre)</th>
+            <th>Subutex</th>
+            <th>Cocaïne (g)</th>
+            <th>Héroïne (g)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of drugSupplyData">
+            <td>{{ entry.date | date:'dd/MM/yyyy' }}</td>
+            <td>{{ entry.cannabis }}</td>
+            <td>{{ entry.tableauA }}</td>
+            <td>{{ entry.ecstasyPills }}</td>
+            <td>{{ entry.ecstasyPowder }}</td>
+            <td>{{ entry.subutex }}</td>
+            <td>{{ entry.cocaine }}</td>
+            <td>{{ entry.heroin }}</td>
+            <td class="actions">
+              <button class="btn-icon edit" (click)="editEntry(entry)">✏️</button>
+              <button class="btn-icon delete" (click)="deleteEntry(entry.id)">🗑️</button>
+            </td>
+          </tr>
+          <tr *ngIf="drugSupplyData.length === 0">
+            <td colspan="9" class="no-data">Aucune donnée disponible</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <form *ngIf="showForm" [formGroup]="seizureForm" class="form-section card" (ngSubmit)="onSubmit()">
+    <h2>{{ editMode ? 'Modifier la saisie' : 'Nouvelle saisie' }}</h2>
     <div class="table-container">
       <table>
         <thead>
@@ -57,282 +105,10 @@
         </tbody>
       </table>
     </div>
-  </form>
 
-  <form [formGroup]="accusationForm" class="form-section">
-    <h2>2. Répartition des personnes inculpées selon la nature d'accusation</h2>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Nature d'accusation</th>
-            <th>Nombre</th>
-            <th>%</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr formGroupName="consumer">
-            <td>Consommateur</td>
-            <td>
-              <input type="number" formControlName="count" class="form-control">
-            </td>
-            <td>
-              <input type="number" formControlName="percentage" class="form-control">
-            </td>
-          </tr>
-          <tr formGroupName="seller">
-            <td>Vendeur</td>
-            <td>
-              <input type="number" formControlName="count" class="form-control">
-            </td>
-            <td>
-              <input type="number" formControlName="percentage" class="form-control">
-            </td>
-          </tr>
-          <tr formGroupName="trafficker">
-            <td>Trafiquant</td>
-            <td>
-              <input type="number" formControlName="count" class="form-control">
-            </td>
-            <td>
-              <input type="number" formControlName="percentage" class="form-control">
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">{{ editMode ? 'Mettre à jour' : 'Enregistrer' }}</button>
+      <button type="button" class="btn-secondary" (click)="showForm = false">Annuler</button>
     </div>
   </form>
-
-  <form [formGroup]="demographicsForm" class="form-section">
-    <h2>3. Répartition des personnes inculpées selon les caractéristiques sociodémographiques</h2>
-    
-    <!-- Genre -->
-    <div formGroupName="gender" class="demographic-section">
-      <h3>Genre</h3>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Catégorie</th>
-              <th>Nombre</th>
-              <th>%</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr formGroupName="male">
-              <td>Masculin</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-            <tr formGroupName="female">
-              <td>Féminin</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Age -->
-    <div formGroupName="age" class="demographic-section">
-      <h3>Age</h3>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Catégorie</th>
-              <th>Nombre</th>
-              <th>%</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr formGroupName="under18">
-              <td>&lt;18 ans</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-            <tr formGroupName="between18And40">
-              <td>18-40</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-            <tr formGroupName="over40">
-              <td>&gt;40</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Nationality -->
-    <div formGroupName="nationality" class="demographic-section">
-      <h3>Nationalité</h3>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Catégorie</th>
-              <th>Nombre</th>
-              <th>%</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr formGroupName="tunisian">
-              <td>Tunisienne</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-            <tr formGroupName="maghrebian">
-              <td>Maghrébine</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-            <tr formGroupName="others">
-              <td>Autres</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Marital Status -->
-    <div formGroupName="maritalStatus" class="demographic-section">
-      <h3>État civil</h3>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Catégorie</th>
-              <th>Nombre</th>
-              <th>%</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr formGroupName="single">
-              <td>Célibataire</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-            <tr formGroupName="married">
-              <td>Marié</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-            <tr formGroupName="divorced">
-              <td>Divorcé</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-            <tr formGroupName="widowed">
-              <td>Veuf</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Employment -->
-    <div formGroupName="employment" class="demographic-section">
-      <h3>État professionnel</h3>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Catégorie</th>
-              <th>Nombre</th>
-              <th>%</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr formGroupName="student">
-              <td>Étudiant</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-            <tr formGroupName="worker">
-              <td>Ouvrier</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-            <tr formGroupName="employee">
-              <td>Fonctionnaire</td>
-              <td>
-                <input type="number" formControlName="count" class="form-control">
-              </td>
-              <td>
-                <input type="number" formControlName="percentage" class="form-control">
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </form>
-
-  <div class="form-actions">
-    <button type="button" class="btn-primary" (click)="onSubmit()">Enregistrer</button>
-  </div>
 </div>
