@@ -27,7 +27,22 @@ export class AuthService {
   login(email: string, password: string): Observable<User> {
     // For demo purposes, hardcode the valid credentials
     if (email === 'moatezelborgi@gmail.com' && password === 'test') {
-      const user: User = { email };
+      const user: User = {
+        email,
+        firstName: 'Test',
+        lastName: 'User',
+        structure: 'Test Structure',
+        phone: '123-456-7890',
+        permissions: {
+          manageRequests: false,
+          manageOffers: false,
+          manageUsers: false,
+          manageSettings: false,
+          accessDashboard: false
+        },
+        isBlocked: false,
+        status: 'offline'
+      };
       return of(user).pipe(
         delay(800), // Simulating network delay
         tap(user => {

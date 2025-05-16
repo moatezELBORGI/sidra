@@ -10,9 +10,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrls: ['./drug-supply.component.css']
 })
 export class DrugSupplyComponent {
-  seizureForm: FormGroup;
-  accusationForm: FormGroup;
-  demographicsForm: FormGroup;
+  seizureForm!: FormGroup;
+  accusationForm!: FormGroup;
+  demographicsForm!: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.initializeForms();

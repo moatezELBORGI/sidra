@@ -100,7 +100,7 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  formatLastLogin(date: string | null): string {
+  formatLastLogin(date: string | null | undefined): string {
     if (!date) return 'Jamais';
     return new Date(date).toLocaleString();
   }
